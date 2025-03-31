@@ -13,8 +13,8 @@ const codeSnippet = `from coevolve import ai
 # Symbiotic AI system
 system = ai.Symbiotic()
 
-# Learn patterns
-system.learn(thinking_patterns)
+# Learn humans
+system.learn(humans)
 
 # Co-evolve
 system.coevolve()`;
@@ -33,7 +33,7 @@ const initiativeDetails = {
         color: 'var(--lightblue)',
         description: 'Current information architecture is built around static forms of data. Minary restructures work around meaning and intention, allowing for dynamic organization that learns and evolves with your thinking process, freeing ideas from rigid formats and enabling fluid thought structures.'
     },
-    'Suddenly': {
+    'Suddenly AI': {
         color: 'var(--salmon)',
         description: 'Some transformations happen gradually, then suddenly. We identify critical leverage points where AI can catalyze profound change, enabling quiet revolutions in how we think, create, and solve problems collectively. The future arrives unevenly—we find the acceleration paths.'
     },
@@ -478,54 +478,57 @@ function setup3DAnimation() {
 function createComputerModel() {
     const group = new THREE.Group();
     
-    // More complex monitor structure
+    // Slight rotation animation for a subtle 'floating' effect
+    gsap.to(group.rotation, {
+        y: "+=6.283", // 2π (one full rotation)
+        duration: 30,
+        repeat: -1,
+        ease: "none"
+    });
+    
+    // Monitor frame
     const monitorFrameGeometry = new THREE.BoxGeometry(6.2, 4.2, 0.6);
     const monitorFrameMaterial = new THREE.MeshBasicMaterial({ 
-        color: 0x333333, 
+        color: 0x222222, 
         wireframe: true,
         transparent: true,
-        opacity: 0.7
+        opacity: 0.6
     });
     const monitorFrame = new THREE.Mesh(monitorFrameGeometry, monitorFrameMaterial);
     group.add(monitorFrame);
     
-    // Screen with glowing effect
+    // Screen
     const screenGeometry = new THREE.PlaneGeometry(5.5, 3.5);
     const screenMaterial = new THREE.MeshBasicMaterial({ 
-        color: 0x1A1A2E,
+        color: 0x00FF00,
         transparent: true,
-        opacity: 0.5
+        opacity: 0.15
     });
     const screen = new THREE.Mesh(screenGeometry, screenMaterial);
     screen.position.z = 0.31;
     group.add(screen);
     
-    // Add detailed circuit board structure inside
+    // Circuit board
     const circuitGeometry = new THREE.BufferGeometry();
     const circuitPositions = [];
-    
-    // Create complex grid of circuits
     for (let x = -2.5; x <= 2.5; x += 0.5) {
         for (let y = -1.5; y <= 1.5; y += 0.5) {
-            // Only add some points for a more realistic circuit look
-            if (Math.random() > 0.4) {
-                // Add horizontal line
+            if (Math.random() > 0.45) {
+                // Horizontal line
                 if (Math.random() > 0.5) {
                     circuitPositions.push(x, y, 0.32);
                     circuitPositions.push(x + 0.4 * Math.random(), y, 0.32);
                 }
-                
-                // Add vertical line
+                // Vertical line
                 if (Math.random() > 0.5) {
                     circuitPositions.push(x, y, 0.32);
                     circuitPositions.push(x, y + 0.4 * Math.random(), 0.32);
                 }
-                
-                // Add connection nodes as small spheres
-                if (Math.random() > 0.7) {
+                // Connection node
+                if (Math.random() > 0.75) {
                     const nodeGeometry = new THREE.SphereGeometry(0.04, 8, 8);
                     const nodeMaterial = new THREE.MeshBasicMaterial({ 
-                        color: 0x6F5CFA, 
+                        color: 0x00FF00,
                         transparent: true,
                         opacity: 0.9
                     });
@@ -536,67 +539,60 @@ function createComputerModel() {
             }
         }
     }
-    
     circuitGeometry.setAttribute('position', new THREE.Float32BufferAttribute(circuitPositions, 3));
     const circuitMaterial = new THREE.LineBasicMaterial({ 
-        color: 0x6F5CFA, 
+        color: 0x00FF00, 
         transparent: true,
         opacity: 0.7
     });
     const circuits = new THREE.LineSegments(circuitGeometry, circuitMaterial);
     group.add(circuits);
     
-    // Add pulsing "processor" in center
+    // Processor (glowing)
     const processorGeometry = new THREE.BoxGeometry(1, 1, 0.1);
     const processorMaterial = new THREE.MeshBasicMaterial({ 
-        color: 0x9277FF, 
+        color: 0xFFFFFF, 
         transparent: true,
         opacity: 0.8
     });
     const processor = new THREE.Mesh(processorGeometry, processorMaterial);
     processor.position.z = 0.35;
     group.add(processor);
-    
+
     // Animate processor glow
     gsap.to(processorMaterial, {
-        opacity: 0.4,
+        opacity: 0.3,
         duration: 1,
         repeat: -1,
         yoyo: true,
         ease: "sine.inOut"
     });
     
-    // Add connecting "data lines" from processor to different parts
+    // Data lines from processor
     const dataLinesGeometry = new THREE.BufferGeometry();
     const dataLinesPositions = [];
-    
     for (let i = 0; i < 12; i++) {
         const angle = (i / 12) * Math.PI * 2;
         const radius = 0.5;
-        
-        const startX = 0;
-        const startY = 0;
-        
+        const startX = 0, startY = 0;
         const endX = Math.cos(angle) * (radius + 1 + Math.random());
         const endY = Math.sin(angle) * (radius + 1 + Math.random());
-        
         dataLinesPositions.push(startX, startY, 0.36);
         dataLinesPositions.push(endX, endY, 0.36);
     }
-    
     dataLinesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(dataLinesPositions, 3));
     const dataLinesMaterial = new THREE.LineBasicMaterial({ 
-        color: 0x9277FF, 
+        color: 0x00FF00, 
         transparent: true,
-        opacity: 0.5
+        opacity: 0.4
     });
     const dataLines = new THREE.LineSegments(dataLinesGeometry, dataLinesMaterial);
     group.add(dataLines);
     
-    // Add keyboard with keys
+    // Keyboard base
     const keyboardBaseGeometry = new THREE.BoxGeometry(5, 1.5, 0.2);
     const keyboardBaseMaterial = new THREE.MeshBasicMaterial({ 
-        color: 0x333333,
+        color: 0x222222,
         wireframe: true,
         transparent: true,
         opacity: 0.6
@@ -606,12 +602,12 @@ function createComputerModel() {
     keyboardBase.position.z = 0.1;
     group.add(keyboardBase);
     
-    // Add individual keys
+    // Keys
     for (let x = -2; x <= 2; x += 0.5) {
         for (let y = -3.5; y <= -2.5; y += 0.4) {
             const keyGeometry = new THREE.BoxGeometry(0.3, 0.25, 0.05);
             const keyMaterial = new THREE.MeshBasicMaterial({ 
-                color: 0x444444,
+                color: 0x333333,
                 wireframe: true,
                 transparent: true,
                 opacity: 0.7
@@ -622,38 +618,24 @@ function createComputerModel() {
         }
     }
     
-    // Create a stand that looks more detailed
+    // Stand
     const standGeometry = new THREE.BufferGeometry();
     const standPositions = [
-        // Center support
-        0, -2, 0,
-        0, -3, 0,
-        
-        // Base horizontal
-        -1.5, -3, 0,
-        1.5, -3, 0,
-        
-        // Base front edge
-        -1.5, -3, 0.2,
-        1.5, -3, 0.2,
-        
-        // Connect verticals
-        -1.5, -3, 0,
-        -1.5, -3, 0.2,
-        
-        1.5, -3, 0,
-        1.5, -3, 0.2,
-        
-        // Additional support beams
-        -0.5, -2, 0,
-        -0.5, -3, 0,
-        
-        0.5, -2, 0,
-        0.5, -3, 0
+        // center support
+        0, -2, 0, 0, -3, 0,
+        // base horizontal
+        -1.5, -3, 0, 1.5, -3, 0,
+        // base front
+        -1.5, -3, 0.2, 1.5, -3, 0.2,
+        // connect verticals
+        -1.5, -3, 0, -1.5, -3, 0.2,
+        1.5, -3, 0, 1.5, -3, 0.2,
+        // extra beams
+        -0.5, -2, 0, -0.5, -3, 0,
+        0.5, -2, 0, 0.5, -3, 0
     ];
-    
     standGeometry.setAttribute('position', new THREE.Float32BufferAttribute(standPositions, 3));
-    const standMaterial = new THREE.LineBasicMaterial({ color: 0x333333 });
+    const standMaterial = new THREE.LineBasicMaterial({ color: 0x222222 });
     const stand = new THREE.LineSegments(standGeometry, standMaterial);
     group.add(stand);
     
@@ -663,10 +645,16 @@ function createComputerModel() {
 function createHumanModel() {
     const group = new THREE.Group();
     
-    // Create a more detailed human figure with more organic forms
+    // Subtle rotation
+    gsap.to(group.rotation, {
+        y: "+=6.283",
+        duration: 30,
+        repeat: -1,
+        ease: "none"
+    });
     
-    // Head with better structure
-    const headGeometry = new THREE.SphereGeometry(1, 24, 24);
+    // Head
+    const headGeometry = new THREE.SphereGeometry(1, 16, 16);
     const headMaterial = new THREE.MeshBasicMaterial({ 
         color: 0x444444, 
         wireframe: true,
@@ -677,342 +665,175 @@ function createHumanModel() {
     head.position.y = 4;
     group.add(head);
     
-    // Detailed brain structure
+    // Brain group
     const brainGroup = new THREE.Group();
-    brainGroup.position.y = 4; // Position at head center
-    
-    // Main brain hemispheres
+    brainGroup.position.y = 4; 
     const leftHemisphereGeometry = new THREE.SphereGeometry(0.7, 16, 16, 0, Math.PI);
     const rightHemisphereGeometry = new THREE.SphereGeometry(0.7, 16, 16, Math.PI, Math.PI);
-    
     const brainMaterial = new THREE.MeshBasicMaterial({
-        color: 0xD94F4F,
+        color: 0x00FF00,
         wireframe: true,
         transparent: true,
-        opacity: 0.4
+        opacity: 0.2
     });
     
     const leftHemisphere = new THREE.Mesh(leftHemisphereGeometry, brainMaterial);
     leftHemisphere.rotation.y = Math.PI / 2;
     leftHemisphere.position.x = -0.1;
-    
     const rightHemisphere = new THREE.Mesh(rightHemisphereGeometry, brainMaterial);
     rightHemisphere.rotation.y = -Math.PI / 2;
     rightHemisphere.position.x = 0.1;
+    brainGroup.add(leftHemisphere, rightHemisphere);
     
-    brainGroup.add(leftHemisphere);
-    brainGroup.add(rightHemisphere);
-    
-    // Neural connections inside brain
+    // Simple neural network
     const neuralGeometry = new THREE.BufferGeometry();
     const neuralPositions = [];
-    
-    // Create more complex neural structure
     const brainPoints = [];
     for (let i = 0; i < 20; i++) {
-        // Random points within brain volume
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.random() * Math.PI;
-        const radius = 0.6 * Math.random();
-        
-        const x = radius * Math.sin(phi) * Math.cos(theta);
-        const y = radius * Math.sin(phi) * Math.sin(theta);
-        const z = radius * Math.cos(phi);
-        
+        const r = 0.6 * Math.random();
+        const x = r * Math.sin(phi) * Math.cos(theta);
+        const y = r * Math.sin(phi) * Math.sin(theta);
+        const z = r * Math.cos(phi);
         brainPoints.push({ x, y, z });
     }
-    
-    // Connect points to create neural network
     for (let i = 0; i < brainPoints.length; i++) {
         const p1 = brainPoints[i];
-        
-        // Connect each point to several others
-        for (let j = 0; j < 3; j++) {
-            const rndIdx = Math.floor(Math.random() * brainPoints.length);
-            const p2 = brainPoints[rndIdx];
-            
-            neuralPositions.push(p1.x, p1.y, p1.z);
-            neuralPositions.push(p2.x, p2.y, p2.z);
+        for (let j = 0; j < 2; j++) {
+            const p2 = brainPoints[Math.floor(Math.random() * brainPoints.length)];
+            neuralPositions.push(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
         }
     }
-    
     neuralGeometry.setAttribute('position', new THREE.Float32BufferAttribute(neuralPositions, 3));
     const neuralMaterial = new THREE.LineBasicMaterial({
-        color: 0xFF8D78,
+        color: 0x00FF00,
         transparent: true,
         opacity: 0.6
     });
-    
     const neuralNetwork = new THREE.LineSegments(neuralGeometry, neuralMaterial);
     brainGroup.add(neuralNetwork);
     
-    // Add neural pulse effect with small glowing spheres
+    // Pulses
     for (let i = 0; i < 10; i++) {
         const idx = Math.floor(Math.random() * brainPoints.length);
         const point = brainPoints[idx];
-        
         const pulseGeometry = new THREE.SphereGeometry(0.03, 8, 8);
         const pulseMaterial = new THREE.MeshBasicMaterial({
-            color: 0xFF8D78,
+            color: 0x00FF00,
             transparent: true,
             opacity: 0.8
         });
-        
         const pulse = new THREE.Mesh(pulseGeometry, pulseMaterial);
         pulse.position.set(point.x, point.y, point.z);
-        
-        // Animate each pulse
         gsap.to(pulseMaterial, {
-            opacity: 0.2,
+            opacity: 0.1,
             duration: 0.8 + Math.random(),
             repeat: -1,
             yoyo: true,
             ease: "sine.inOut"
         });
-        
         brainGroup.add(pulse);
     }
-    
     group.add(brainGroup);
     
-    // Eyes with more detail
-    const eyeGeometry = new THREE.SphereGeometry(0.2, 16, 16);
+    // Eyes
+    const eyeGeometry = new THREE.SphereGeometry(0.2, 8, 8);
     const eyeOuterMaterial = new THREE.MeshBasicMaterial({ 
         color: 0xffffff,
         transparent: true,
         opacity: 0.7
     });
-    
     const leftEye = new THREE.Mesh(eyeGeometry, eyeOuterMaterial);
     leftEye.position.set(-0.35, 4.1, 0.85);
-    
     const rightEye = new THREE.Mesh(eyeGeometry, eyeOuterMaterial);
     rightEye.position.set(0.35, 4.1, 0.85);
     
-    // Add pupils
     const pupilGeometry = new THREE.SphereGeometry(0.08, 8, 8);
     const pupilMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
-    
     const leftPupil = new THREE.Mesh(pupilGeometry, pupilMaterial);
-    leftPupil.position.set(0, 0, 0.12);
+    leftPupil.position.z = 0.12;
     leftEye.add(leftPupil);
-    
     const rightPupil = new THREE.Mesh(pupilGeometry, pupilMaterial);
-    rightPupil.position.set(0, 0, 0.12);
+    rightPupil.position.z = 0.12;
     rightEye.add(rightPupil);
     
-    group.add(leftEye);
-    group.add(rightEye);
+    group.add(leftEye, rightEye);
     
-    // More detailed body with musculature and better proportions
+    // Body (line-based)
     const torsoGeometry = new THREE.BufferGeometry();
     const torsoPositions = [];
-    
+    // (all original torso points preserved below)
     // Neck
-    torsoPositions.push(0, 3, 0);
-    torsoPositions.push(-0.2, 2.7, 0.1);
-    
-    torsoPositions.push(0, 3, 0);
-    torsoPositions.push(0.2, 2.7, 0.1);
-    
-    torsoPositions.push(-0.2, 2.7, 0.1);
-    torsoPositions.push(0, 2.5, 0.15);
-    
-    torsoPositions.push(0.2, 2.7, 0.1);
-    torsoPositions.push(0, 2.5, 0.15);
-    
-    // Shoulders with more articulation
-    torsoPositions.push(0, 2.5, 0.15);
-    torsoPositions.push(-0.5, 2.3, 0.1);
-    
-    torsoPositions.push(0, 2.5, 0.15);
-    torsoPositions.push(0.5, 2.3, 0.1);
-    
-    torsoPositions.push(-0.5, 2.3, 0.1);
-    torsoPositions.push(-1.5, 2.2, 0);
-    
-    torsoPositions.push(0.5, 2.3, 0.1);
-    torsoPositions.push(1.5, 2.2, 0);
-    
-    // Detailed chest/torso with muscle definition
-    // Pectoral outlines
-    torsoPositions.push(-0.5, 2.3, 0.1);
-    torsoPositions.push(-0.8, 1.8, 0.2);
-    
-    torsoPositions.push(0.5, 2.3, 0.1);
-    torsoPositions.push(0.8, 1.8, 0.2);
-    
-    torsoPositions.push(-0.8, 1.8, 0.2);
-    torsoPositions.push(-0.4, 1.2, 0.25);
-    
-    torsoPositions.push(0.8, 1.8, 0.2);
-    torsoPositions.push(0.4, 1.2, 0.25);
-    
-    torsoPositions.push(-0.4, 1.2, 0.25);
-    torsoPositions.push(0, 1, 0.2);
-    
-    torsoPositions.push(0.4, 1.2, 0.25);
-    torsoPositions.push(0, 1, 0.2);
-    
-    // Central line
-    torsoPositions.push(0, 2.5, 0.15);
-    torsoPositions.push(0, 1, 0.2);
-    
-    torsoPositions.push(0, 1, 0.2);
-    torsoPositions.push(0, -0.5, 0);
-    
-    // Abdominal definition
-    torsoPositions.push(-0.4, 1, 0.2);
-    torsoPositions.push(-0.4, 0.5, 0.15);
-    
-    torsoPositions.push(0.4, 1, 0.2);
-    torsoPositions.push(0.4, 0.5, 0.15);
-    
-    torsoPositions.push(-0.4, 0.5, 0.15);
-    torsoPositions.push(-0.3, 0, 0.1);
-    
-    torsoPositions.push(0.4, 0.5, 0.15);
-    torsoPositions.push(0.3, 0, 0.1);
-    
-    torsoPositions.push(-0.3, 0, 0.1);
-    torsoPositions.push(0, -0.5, 0);
-    
-    torsoPositions.push(0.3, 0, 0.1);
-    torsoPositions.push(0, -0.5, 0);
-    
-    // Hip structure
-    torsoPositions.push(0, -0.5, 0);
-    torsoPositions.push(-1, -1, 0);
-    
-    torsoPositions.push(0, -0.5, 0);
-    torsoPositions.push(1, -1, 0);
-    
-    torsoPositions.push(-1, -1, 0);
-    torsoPositions.push(1, -1, 0);
-    
-    // Arms with more detailed muscles and joints
-    // Left arm
-    torsoPositions.push(-1.5, 2.2, 0);
-    torsoPositions.push(-2, 1.7, 0);
-    
-    torsoPositions.push(-2, 1.7, 0);
-    torsoPositions.push(-2.2, 1.2, 0);
-    
-    torsoPositions.push(-2.2, 1.2, 0);
-    torsoPositions.push(-2.3, 0.7, 0);
-    
-    torsoPositions.push(-2.3, 0.7, 0);
-    torsoPositions.push(-2.7, 0, 0);
-    
-    torsoPositions.push(-2.7, 0, 0);
-    torsoPositions.push(-3, -0.5, 0);
-    
-    // Left arm muscle definition
-    torsoPositions.push(-1.5, 2.2, 0);
-    torsoPositions.push(-1.8, 1.5, -0.1);
-    
-    torsoPositions.push(-1.8, 1.5, -0.1);
-    torsoPositions.push(-2.2, 1.2, 0);
-    
-    torsoPositions.push(-2.3, 0.7, 0);
-    torsoPositions.push(-2.5, 0.5, -0.1);
-    
-    torsoPositions.push(-2.5, 0.5, -0.1);
-    torsoPositions.push(-2.7, 0, 0);
-    
-    // Right arm with similar detail
-    torsoPositions.push(1.5, 2.2, 0);
-    torsoPositions.push(2, 1.7, 0);
-    
-    torsoPositions.push(2, 1.7, 0);
-    torsoPositions.push(2.2, 1.2, 0);
-    
-    torsoPositions.push(2.2, 1.2, 0);
-    torsoPositions.push(2.3, 0.7, 0);
-    
-    torsoPositions.push(2.3, 0.7, 0);
-    torsoPositions.push(2.7, 0, 0);
-    
-    torsoPositions.push(2.7, 0, 0);
-    torsoPositions.push(3, -0.5, 0);
-    
-    // Right arm muscle definition
-    torsoPositions.push(1.5, 2.2, 0);
-    torsoPositions.push(1.8, 1.5, -0.1);
-    
-    torsoPositions.push(1.8, 1.5, -0.1);
-    torsoPositions.push(2.2, 1.2, 0);
-    
-    torsoPositions.push(2.3, 0.7, 0);
-    torsoPositions.push(2.5, 0.5, -0.1);
-    
-    torsoPositions.push(2.5, 0.5, -0.1);
-    torsoPositions.push(2.7, 0, 0);
-    
-    // Legs with more anatomical detail
-    // Left leg
-    torsoPositions.push(-1, -1, 0);
-    torsoPositions.push(-1.1, -1.5, 0);
-    
-    torsoPositions.push(-1.1, -1.5, 0);
-    torsoPositions.push(-1.2, -2, 0);
-    
-    torsoPositions.push(-1.2, -2, 0);
-    torsoPositions.push(-1.1, -2.5, 0);
-    
-    torsoPositions.push(-1.1, -2.5, 0);
-    torsoPositions.push(-1, -3, 0);
-    
-    torsoPositions.push(-1, -3, 0);
-    torsoPositions.push(-0.9, -3.5, 0);
-    
-    torsoPositions.push(-0.9, -3.5, 0);
-    torsoPositions.push(-0.8, -4, 0);
-    
-    // Left leg muscle definition
-    torsoPositions.push(-1, -1, 0);
-    torsoPositions.push(-0.8, -1.3, 0.1);
-    
-    torsoPositions.push(-0.8, -1.3, 0.1);
-    torsoPositions.push(-1.1, -1.5, 0);
-    
-    torsoPositions.push(-1.1, -2.5, 0);
-    torsoPositions.push(-0.9, -2.3, 0.1);
-    
-    torsoPositions.push(-0.9, -2.3, 0.1);
-    torsoPositions.push(-1, -2, 0);
-    
-    // Right leg with similar detail
-    torsoPositions.push(1, -1, 0);
-    torsoPositions.push(1.1, -1.5, 0);
-    
-    torsoPositions.push(1.1, -1.5, 0);
-    torsoPositions.push(1.2, -2, 0);
-    
-    torsoPositions.push(1.2, -2, 0);
-    torsoPositions.push(1.1, -2.5, 0);
-    
-    torsoPositions.push(1.1, -2.5, 0);
-    torsoPositions.push(1, -3, 0);
-    
-    torsoPositions.push(1, -3, 0);
-    torsoPositions.push(0.9, -3.5, 0);
-    
-    torsoPositions.push(0.9, -3.5, 0);
-    torsoPositions.push(0.8, -4, 0);
-    
-    // Right leg muscle definition
-    torsoPositions.push(1, -1, 0);
-    torsoPositions.push(0.8, -1.3, 0.1);
-    
-    torsoPositions.push(0.8, -1.3, 0.1);
-    torsoPositions.push(1.1, -1.5, 0);
-    
-    torsoPositions.push(1.1, -2.5, 0);
-    torsoPositions.push(0.9, -2.3, 0.1);
-    
-    torsoPositions.push(0.9, -2.3, 0.1);
-    torsoPositions.push(1, -2, 0);
+    torsoPositions.push(0, 3, 0,  -0.2, 2.7, 0.1);
+    torsoPositions.push(0, 3, 0,   0.2, 2.7, 0.1);
+    torsoPositions.push(-0.2, 2.7, 0.1, 0, 2.5, 0.15);
+    torsoPositions.push(0.2, 2.7, 0.1, 0, 2.5, 0.15);
+    // Shoulders
+    torsoPositions.push(0, 2.5, 0.15, -0.5, 2.3, 0.1);
+    torsoPositions.push(0, 2.5, 0.15,  0.5, 2.3, 0.1);
+    torsoPositions.push(-0.5, 2.3, 0.1, -1.5, 2.2, 0);
+    torsoPositions.push(0.5, 2.3, 0.1,  1.5, 2.2, 0);
+    // Chest
+    torsoPositions.push(-0.5, 2.3, 0.1, -0.8, 1.8, 0.2);
+    torsoPositions.push( 0.5, 2.3, 0.1,  0.8, 1.8, 0.2);
+    torsoPositions.push(-0.8, 1.8, 0.2, -0.4, 1.2, 0.25);
+    torsoPositions.push( 0.8, 1.8, 0.2,  0.4, 1.2, 0.25);
+    torsoPositions.push(-0.4, 1.2, 0.25,  0, 1, 0.2);
+    torsoPositions.push( 0.4, 1.2, 0.25,  0, 1, 0.2);
+    torsoPositions.push(0, 2.5, 0.15, 0, 1, 0.2);
+    torsoPositions.push(0, 1, 0.2, 0, -0.5, 0);
+    // Abs
+    torsoPositions.push(-0.4, 1, 0.2, -0.4, 0.5, 0.15);
+    torsoPositions.push( 0.4, 1, 0.2,  0.4, 0.5, 0.15);
+    torsoPositions.push(-0.4, 0.5, 0.15, -0.3, 0, 0.1);
+    torsoPositions.push( 0.4, 0.5, 0.15,  0.3, 0, 0.1);
+    torsoPositions.push(-0.3, 0, 0.1, 0, -0.5, 0);
+    torsoPositions.push( 0.3, 0, 0.1, 0, -0.5, 0);
+    // Hips
+    torsoPositions.push(0, -0.5, 0, -1, -1, 0);
+    torsoPositions.push(0, -0.5, 0,  1, -1, 0);
+    torsoPositions.push(-1, -1, 0, 1, -1, 0);
+    // Arms
+    torsoPositions.push(-1.5, 2.2, 0, -2, 1.7, 0);
+    torsoPositions.push(-2, 1.7, 0, -2.2, 1.2, 0);
+    torsoPositions.push(-2.2, 1.2, 0, -2.3, 0.7, 0);
+    torsoPositions.push(-2.3, 0.7, 0, -2.7, 0, 0);
+    torsoPositions.push(-2.7, 0, 0, -3, -0.5, 0);
+    torsoPositions.push(-1.5, 2.2, 0, -1.8, 1.5, -0.1);
+    torsoPositions.push(-1.8, 1.5, -0.1, -2.2, 1.2, 0);
+    torsoPositions.push(-2.3, 0.7, 0, -2.5, 0.5, -0.1);
+    torsoPositions.push(-2.5, 0.5, -0.1, -2.7, 0, 0);
+    torsoPositions.push(1.5, 2.2, 0, 2, 1.7, 0);
+    torsoPositions.push(2, 1.7, 0, 2.2, 1.2, 0);
+    torsoPositions.push(2.2, 1.2, 0, 2.3, 0.7, 0);
+    torsoPositions.push(2.3, 0.7, 0, 2.7, 0, 0);
+    torsoPositions.push(2.7, 0, 0, 3, -0.5, 0);
+    torsoPositions.push(1.5, 2.2, 0, 1.8, 1.5, -0.1);
+    torsoPositions.push(1.8, 1.5, -0.1, 2.2, 1.2, 0);
+    torsoPositions.push(2.3, 0.7, 0, 2.5, 0.5, -0.1);
+    torsoPositions.push(2.5, 0.5, -0.1, 2.7, 0, 0);
+    // Legs
+    torsoPositions.push(-1, -1, 0, -1.1, -1.5, 0);
+    torsoPositions.push(-1.1, -1.5, 0, -1.2, -2, 0);
+    torsoPositions.push(-1.2, -2, 0, -1.1, -2.5, 0);
+    torsoPositions.push(-1.1, -2.5, 0, -1, -3, 0);
+    torsoPositions.push(-1, -3, 0, -0.9, -3.5, 0);
+    torsoPositions.push(-0.9, -3.5, 0, -0.8, -4, 0);
+    torsoPositions.push(-1, -1, 0, -0.8, -1.3, 0.1);
+    torsoPositions.push(-0.8, -1.3, 0.1, -1.1, -1.5, 0);
+    torsoPositions.push(-1.1, -2.5, 0, -0.9, -2.3, 0.1);
+    torsoPositions.push(-0.9, -2.3, 0.1, -1, -2, 0);
+    torsoPositions.push(1, -1, 0, 1.1, -1.5, 0);
+    torsoPositions.push(1.1, -1.5, 0, 1.2, -2, 0);
+    torsoPositions.push(1.2, -2, 0, 1.1, -2.5, 0);
+    torsoPositions.push(1.1, -2.5, 0, 1, -3, 0);
+    torsoPositions.push(1, -3, 0, 0.9, -3.5, 0);
+    torsoPositions.push(0.9, -3.5, 0, 0.8, -4, 0);
+    torsoPositions.push(1, -1, 0, 0.8, -1.3, 0.1);
+    torsoPositions.push(0.8, -1.3, 0.1, 1.1, -1.5, 0);
+    torsoPositions.push(1.1, -2.5, 0, 0.9, -2.3, 0.1);
+    torsoPositions.push(0.9, -2.3, 0.1, 1, -2, 0);
     
     torsoGeometry.setAttribute('position', new THREE.Float32BufferAttribute(torsoPositions, 3));
     const torsoMaterial = new THREE.LineBasicMaterial({ 
@@ -1023,60 +844,41 @@ function createHumanModel() {
     const torso = new THREE.LineSegments(torsoGeometry, torsoMaterial);
     group.add(torso);
     
-    // Add neural system flowing through body
+    // Neural system (spinal cord + branches)
     const neuralSystemGeometry = new THREE.BufferGeometry();
     const neuralSystemPositions = [];
-    
-    // Create more complex neural pathways flowing down from brain to body
     const spinalPoints = [];
-    
-    // Main spinal cord
     for (let y = 3.5; y >= -3.5; y -= 0.2) {
         const x = Math.sin(y * 2) * 0.05;
         spinalPoints.push({ x, y, z: 0.05 });
     }
-    
-    // Connect spinal points
     for (let i = 0; i < spinalPoints.length - 1; i++) {
         const p1 = spinalPoints[i];
         const p2 = spinalPoints[i + 1];
-        
-        neuralSystemPositions.push(p1.x, p1.y, p1.z);
-        neuralSystemPositions.push(p2.x, p2.y, p2.z);
-        
-        // Add branching nerves at intervals
+        neuralSystemPositions.push(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
         if (i % 3 === 0) {
-            // Left branch
-            neuralSystemPositions.push(p1.x, p1.y, p1.z);
-            neuralSystemPositions.push(p1.x - 0.5 - Math.random() * 0.5, p1.y, p1.z - 0.05);
-            
-            // Right branch
-            neuralSystemPositions.push(p1.x, p1.y, p1.z);
-            neuralSystemPositions.push(p1.x + 0.5 + Math.random() * 0.5, p1.y, p1.z - 0.05);
+            neuralSystemPositions.push(p1.x, p1.y, p1.z, p1.x - 0.5 - Math.random() * 0.5, p1.y, p1.z - 0.05);
+            neuralSystemPositions.push(p1.x, p1.y, p1.z, p1.x + 0.5 + Math.random() * 0.5, p1.y, p1.z - 0.05);
         }
     }
-    
     neuralSystemGeometry.setAttribute('position', new THREE.Float32BufferAttribute(neuralSystemPositions, 3));
     const neuralSystemMaterial = new THREE.LineBasicMaterial({ 
-        color: 0xFF8D78,
+        color: 0x00FF00,
         transparent: true,
-        opacity: 0.4
+        opacity: 0.3
     });
     const neuralSystem = new THREE.LineSegments(neuralSystemGeometry, neuralSystemMaterial);
     group.add(neuralSystem);
     
-    // Create gentle aura around figure
-    const auraGeometry = new THREE.SphereGeometry(4.5, 24, 24);
+    // Aura
+    const auraGeometry = new THREE.SphereGeometry(4.5, 16, 16);
     const auraMaterial = new THREE.MeshBasicMaterial({
-        color: 0xFF8D78,
+        color: 0x00FF00,
         transparent: true,
         opacity: 0.03,
         side: THREE.BackSide
     });
     const aura = new THREE.Mesh(auraGeometry, auraMaterial);
-    aura.position.y = 0;
-    
-    // Animate aura subtly
     gsap.to(aura.scale, {
         x: 1.05,
         y: 1.05,
@@ -1086,7 +888,6 @@ function createHumanModel() {
         yoyo: true,
         ease: "sine.inOut"
     });
-    
     group.add(aura);
     
     return group;
@@ -1095,250 +896,112 @@ function createHumanModel() {
 function createMergedEntity() {
     const group = new THREE.Group();
     
-    // Core structure - a blend of human and computer
-    const hybridGeometry = new THREE.BufferGeometry();
+    // Slow rotation
+    gsap.to(group.rotation, {
+        y: "+=6.283",
+        duration: 40,
+        repeat: -1,
+        ease: "none"
+    });
     
-    // Complex points for a human-computer hybrid shape
-    // Define the structure in layers for better organization
+    // Core hybrid
+    const hybridGeometry = new THREE.BufferGeometry();
     const points = [];
     
     // Head/monitor hybrid
     const headPoints = [
-        // Top frame
-        -1.5, 5, 0,
-        1.5, 5, 0,
-        
-        // Side frames
-        -1.5, 5, 0,
-        -1.5, 3.5, 0,
-        
-        1.5, 5, 0,
-        1.5, 3.5, 0,
-        
-        // Bottom frame
-        -1.5, 3.5, 0,
-        1.5, 3.5, 0,
-        
-        // Display features (eyes)
-        -0.7, 4.5, 0.1,
-        -0.3, 4.5, 0.1,
-        
-        0.7, 4.5, 0.1,
-        0.3, 4.5, 0.1,
-        
-        // Circuit patterns in head
-        -1.2, 4.8, 0.1,
-        -0.8, 4.8, 0.1,
-        
-        0.8, 4.8, 0.1,
-        1.2, 4.8, 0.1,
-        
-        -1, 4.3, 0.1,
-        -0.2, 4.3, 0.1,
-        
-        0.2, 4.3, 0.1,
-        1, 4.3, 0.1,
-        
-        -1.2, 3.8, 0.1,
-        -0.4, 3.8, 0.1,
-        
-        0.4, 3.8, 0.1,
-        1.2, 3.8, 0.1,
-        
-        // "Neural" connections from head
-        0, 3.5, 0,
-        0, 3, 0
+        -1.5, 5, 0,  1.5, 5, 0,
+        -1.5, 5, 0, -1.5, 3.5, 0,
+         1.5, 5, 0,  1.5, 3.5, 0,
+        -1.5, 3.5, 0,  1.5, 3.5, 0,
+        -0.7, 4.5, 0.1, -0.3, 4.5, 0.1,
+         0.7, 4.5, 0.1,  0.3, 4.5, 0.1,
+        -1.2, 4.8, 0.1, -0.8, 4.8, 0.1,
+         0.8, 4.8, 0.1,  1.2, 4.8, 0.1,
+        -1, 4.3, 0.1, -0.2, 4.3, 0.1,
+         0.2, 4.3, 0.1,  1, 4.3, 0.1,
+        -1.2, 3.8, 0.1, -0.4, 3.8, 0.1,
+         0.4, 3.8, 0.1,  1.2, 3.8, 0.1,
+         0, 3.5, 0, 0, 3, 0
     ];
     
-    // Torso/chassis hybrid
+    // Torso/chassis
     const torsoPoints = [
-        // Neck/connection
-        0, 3, 0,
-        0, 2, 0,
-        
-        // Shoulder frame
-        -2, 2, 0,
-        2, 2, 0,
-        
-        // Main body structure - stylized computer case/human chest
-        -2, 2, 0,
-        -2, -1, 0,
-        
-        2, 2, 0,
-        2, -1, 0,
-        
-        -2, -1, 0,
-        2, -1, 0,
-        
-        // Internal structure lines - motherboard/organs
-        -1.5, 1.5, 0.1,
-        1.5, 1.5, 0.1,
-        
-        -1.5, 1, 0.1,
-        1.5, 1, 0.1,
-        
-        -1.5, 0.5, 0.1,
-        1.5, 0.5, 0.1,
-        
-        -1.5, 0, 0.1,
-        1.5, 0, 0.1,
-        
-        -1.5, -0.5, 0.1,
-        1.5, -0.5, 0.1,
-        
-        // Vertical data buses/spine
-        -1, 2, 0.1,
-        -1, -1, 0.1,
-        
-        0, 2, 0.1,
-        0, -1, 0.1,
-        
-        1, 2, 0.1,
-        1, -1, 0.1,
-        
-        // Central processor/heart
-        -0.7, 1, 0.2,
-        0.7, 1, 0.2,
-        
-        0.7, 1, 0.2,
-        0.7, 0, 0.2,
-        
-        0.7, 0, 0.2,
-        -0.7, 0, 0.2,
-        
-        -0.7, 0, 0.2,
-        -0.7, 1, 0.2
+        0, 3, 0, 0, 2, 0,
+        -2, 2, 0, 2, 2, 0,
+        -2, 2, 0, -2, -1, 0,
+         2, 2, 0,  2, -1, 0,
+        -2, -1, 0,  2, -1, 0,
+        -1.5, 1.5, 0.1, 1.5, 1.5, 0.1,
+        -1.5, 1, 0.1,   1.5, 1, 0.1,
+        -1.5, 0.5, 0.1, 1.5, 0.5, 0.1,
+        -1.5, 0, 0.1,   1.5, 0, 0.1,
+        -1.5, -0.5, 0.1, 1.5, -0.5, 0.1,
+        -1, 2, 0.1, -1, -1, 0.1,
+         0, 2, 0.1,  0, -1, 0.1,
+         1, 2, 0.1,  1, -1, 0.1,
+        -0.7, 1, 0.2, 0.7, 1, 0.2,
+         0.7, 1, 0.2, 0.7, 0, 0.2,
+         0.7, 0, 0.2, -0.7, 0, 0.2,
+        -0.7, 0, 0.2, -0.7, 1, 0.2
     ];
     
-    // Arms/peripherals
+    // Arms
     const armPoints = [
-        // Left arm - more mechanical in nature
-        -2, 2, 0,
-        -2.5, 1.5, 0,
-        
-        -2.5, 1.5, 0,
-        -3, 0.5, 0,
-        
-        -3, 0.5, 0,
-        -3.5, -0.5, 0,
-        
-        // Left arm details - circuit-like
-        -2.5, 1.5, 0.1,
-        -2.2, 1.2, 0.1,
-        
-        -2.2, 1.2, 0.1,
-        -2.7, 0.8, 0.1,
-        
-        -2.7, 0.8, 0.1,
-        -3, 0.5, 0.1,
-        
-        // Right arm - more organic in nature
-        2, 2, 0,
-        2.3, 1.3, 0,
-        
-        2.3, 1.3, 0,
-        3, 0.7, 0,
-        
-        3, 0.7, 0,
-        3.5, -0.3, 0,
-        
-        // Right arm details - neural-like
-        2.3, 1.3, 0.1,
-        2.5, 1, 0.1,
-        
-        2.5, 1, 0.1,
-        2.8, 0.9, 0.1,
-        
-        2.8, 0.9, 0.1,
-        3, 0.7, 0.1
+        -2, 2, 0, -2.5, 1.5, 0,
+        -2.5, 1.5, 0, -3, 0.5, 0,
+        -3, 0.5, 0, -3.5, -0.5, 0,
+        -2.5, 1.5, 0.1, -2.2, 1.2, 0.1,
+        -2.2, 1.2, 0.1, -2.7, 0.8, 0.1,
+        -2.7, 0.8, 0.1, -3, 0.5, 0.1,
+         2, 2, 0, 2.3, 1.3, 0,
+         2.3, 1.3, 0, 3, 0.7, 0,
+         3, 0.7, 0, 3.5, -0.3, 0,
+         2.3, 1.3, 0.1, 2.5, 1, 0.1,
+         2.5, 1, 0.1, 2.8, 0.9, 0.1,
+         2.8, 0.9, 0.1, 3, 0.7, 0.1
     ];
     
-    // Legs/supports
+    // Legs
     const legPoints = [
-        // Left leg - robotic/structured
-        -1.5, -1, 0,
-        -1.5, -2, 0,
-        
-        -1.5, -2, 0,
-        -1.5, -3, 0,
-        
-        -1.5, -3, 0,
-        -1, -4, 0,
-        
-        // Left leg segments - mechanical joins
-        -1.5, -2, 0.1,
-        -1.2, -2, 0.1,
-        
-        -1.5, -3, 0.1,
-        -1.3, -3, 0.1,
-        
-        // Right leg - more flowing/organic
-        1.5, -1, 0,
-        1.3, -2, 0,
-        
-        1.3, -2, 0,
-        1.5, -3, 0,
-        
-        1.5, -3, 0,
-        1, -4, 0,
-        
-        // Right leg details - flowing curves
-        1.3, -2, 0.1,
-        1.4, -2.5, 0.1,
-        
-        1.4, -2.5, 0.1,
-        1.5, -3, 0.1
+        -1.5, -1, 0, -1.5, -2, 0,
+        -1.5, -2, 0, -1.5, -3, 0,
+        -1.5, -3, 0, -1, -4, 0,
+        -1.5, -2, 0.1, -1.2, -2, 0.1,
+        -1.5, -3, 0.1, -1.3, -3, 0.1,
+         1.5, -1, 0, 1.3, -2, 0,
+         1.3, -2, 0, 1.5, -3, 0,
+         1.5, -3, 0, 1, -4, 0,
+         1.3, -2, 0.1, 1.4, -2.5, 0.1,
+         1.4, -2.5, 0.1, 1.5, -3, 0.1
     ];
     
-    // Data/neural connections between components
+    // Connections
     const connectionPoints = [
-        // Head to torso connections
-        -1, 3.5, 0.15,
-        -1.5, 3, 0.15,
-        
-        1, 3.5, 0.15,
-        1.5, 3, 0.15,
-        
-        // Processor to arms
-        0, 0.5, 0.2,
-        -2, 1, 0.2,
-        
-        0, 0.5, 0.2,
-        2, 1, 0.2,
-        
-        // Processor to legs
-        0, 0, 0.2,
-        -1, -1.5, 0.2,
-        
-        0, 0, 0.2,
-        1, -1.5, 0.2,
-        
-        // Cross-connections
-        -1, 1.5, 0.15,
-        1, 0, 0.15,
-        
-        1, 1.5, 0.15,
-        -1, 0, 0.15
+        -1, 3.5, 0.15, -1.5, 3, 0.15,
+         1, 3.5, 0.15,  1.5, 3, 0.15,
+         0, 0.5, 0.2,  -2, 1, 0.2,
+         0, 0.5, 0.2,   2, 1, 0.2,
+         0, 0, 0.2, -1, -1.5, 0.2,
+         0, 0, 0.2,  1, -1.5, 0.2,
+        -1, 1.5, 0.15,  1, 0, 0.15,
+         1, 1.5, 0.15, -1, 0, 0.15
     ];
     
-    // Detailed circuitry overlays
+    // Circuitry overlays
     const circuitryPoints = [];
     for (let i = 0; i < 35; i++) {
         const x1 = (Math.random() - 0.5) * 3;
         const y1 = (Math.random() - 0.5) * 8;
         const z1 = 0.3;
-        
-        const length = 0.3 + Math.random() * 0.7;
+        const length = 0.2 + Math.random() * 0.5;
         const angle = Math.random() * Math.PI * 2;
-        
         const x2 = x1 + Math.cos(angle) * length;
         const y2 = y1 + Math.sin(angle) * length;
-        const z2 = z1;
-        
-        circuitryPoints.push(x1, y1, z1, x2, y2, z2);
+        circuitryPoints.push(x1, y1, z1, x2, y2, z1);
     }
     
-    // Combine all points
+    // Combine main shape
     points.push(
         ...headPoints,
         ...torsoPoints,
@@ -1346,41 +1009,39 @@ function createMergedEntity() {
         ...legPoints,
         ...connectionPoints
     );
-    
-    // Create the main hybrid body
     hybridGeometry.setAttribute('position', new THREE.Float32BufferAttribute(points, 3));
     const hybridMaterial = new THREE.LineBasicMaterial({ 
-        color: 0x333333, 
+        color: 0x222222,
         linewidth: 1.5
     });
     const hybrid = new THREE.LineSegments(hybridGeometry, hybridMaterial);
     group.add(hybrid);
     
-    // Add circuitry overlay
+    // Add circuitry
     const circuitryGeometry = new THREE.BufferGeometry();
     circuitryGeometry.setAttribute('position', new THREE.Float32BufferAttribute(circuitryPoints, 3));
     const circuitryMaterial = new THREE.LineBasicMaterial({ 
-        color: 0x6F5CFA, 
+        color: 0x00FF00,
         transparent: true,
-        opacity: 0.7 
+        opacity: 0.7
     });
     const circuitry = new THREE.LineSegments(circuitryGeometry, circuitryMaterial);
     group.add(circuitry);
     
-    // Create a subtle glow effect
+    // Glow
     const glowGeometry = new THREE.SphereGeometry(5, 16, 16);
     const glowMaterial = new THREE.MeshBasicMaterial({
-        color: 0x6F5CFA,
+        color: 0x00FF00,
         transparent: true,
         opacity: 0.05
     });
     const glow = new THREE.Mesh(glowGeometry, glowMaterial);
-    glow.scale.set(1, 1.5, 0.5); // Flatten into an oval
+    glow.scale.set(1, 1.5, 0.5);
     group.add(glow);
     
-    // Add animation details with GSAP
+    // Circuitry opacity animation
     gsap.to(circuitry.material, {
-        opacity: 0.4,
+        opacity: 0.3,
         duration: 2,
         repeat: -1,
         yoyo: true,
@@ -1393,8 +1054,8 @@ function createMergedEntity() {
 function createParticles() {
     const group = new THREE.Group();
     
-    // Create floating particles that will surround the models
-    const colors = [0xE6C068, 0x9277FF, 0x67D4F8, 0xFF8D78, 0xD94F4F];
+    // Neon-ish palette
+    const colors = [0x00FF00, 0xFF00FF, 0x00FFFF, 0xFFFF00];
     
     for (let i = 0; i < 50; i++) {
         const particle = new THREE.Mesh(
@@ -1402,20 +1063,20 @@ function createParticles() {
             new THREE.MeshBasicMaterial({
                 color: colors[Math.floor(Math.random() * colors.length)],
                 transparent: true,
-                opacity: 0.3 + Math.random() * 0.3
+                opacity: 0.3 + Math.random() * 0.3,
+                side: THREE.DoubleSide
             })
         );
         
-        // Position randomly in a sphere around origin
+        // Random spherical position
         const radius = 5 + Math.random() * 5;
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.random() * Math.PI;
-        
         particle.position.x = radius * Math.sin(phi) * Math.cos(theta);
         particle.position.y = radius * Math.sin(phi) * Math.sin(theta);
         particle.position.z = radius * Math.cos(phi);
         
-        // Face the camera
+        // Billboard rotation
         particle.rotation.x = -Math.PI / 2;
         
         group.add(particle);
@@ -1424,11 +1085,10 @@ function createParticles() {
     return group;
 }
 
-// Smooth scrolling for anchor links
+// Smooth scrolling
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
         e.preventDefault();
-        
         const target = document.querySelector(this.getAttribute('href'));
         if (target) {
             window.scrollTo({
@@ -1437,4 +1097,4 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             });
         }
     });
-}); 
+});
