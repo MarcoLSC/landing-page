@@ -1,12 +1,3 @@
-document.addEventListener('DOMContentLoaded', () => {
-    setupBackgroundCanvas();
-    setupCardInteractions();
-    setupModal();
-    setupTypingAnimation();
-    setupConceptAnimation();
-    setupScrollHint();
-});
-
 // Code to be typed out in animation - shortened for faster typing
 const codeSnippet = `from coevolve import ai
 
@@ -33,7 +24,7 @@ const initiativeDetails = {
         color: 'var(--lightblue)',
         description: 'Current information architecture is built around static forms of data. Minary restructures work around meaning and intention, allowing for dynamic organization that learns and evolves with your thinking process, freeing ideas from rigid formats and enabling fluid thought structures.'
     },
-    'Suddenly AI': {
+    'Suddenly': {
         color: 'var(--salmon)',
         description: 'Some transformations happen gradually, then suddenly. We identify critical leverage points where AI can catalyze profound change, enabling quiet revolutions in how we think, create, and solve problems collectively. The future arrives unevenly—we find the acceleration paths.'
     },
@@ -565,3 +556,44 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         }
     });
 });
+
+// Make sure all required scripts are loaded before starting animations
+function ensureResourcesLoaded() {
+    const requiredResources = [
+        typeof gsap !== 'undefined'
+    ];
+    
+    return requiredResources.every(resource => resource === true);
+}
+
+// Ensure resources are loaded before running code
+document.addEventListener('DOMContentLoaded', () => {
+    // Check if resources are loaded
+    if (ensureResourcesLoaded()) {
+        initializeApp();
+    } else {
+        // Try again after a slight delay if resources aren't ready yet
+        const resourceCheck = setInterval(() => {
+            if (ensureResourcesLoaded()) {
+                clearInterval(resourceCheck);
+                initializeApp();
+            }
+        }, 200);
+        
+        // Safety fallback - initialize anyway after 3 seconds
+        setTimeout(() => {
+            clearInterval(resourceCheck);
+            console.warn('Starting app with potentially missing resources');
+            initializeApp();
+        }, 3000);
+    }
+});
+
+function initializeApp() {
+    setupBackgroundCanvas();
+    setupCardInteractions();
+    setupModal();
+    setupTypingAnimation();
+    setupConceptAnimation();
+    setupScrollHint();
+}
