@@ -1,45 +1,55 @@
 # Co-evolve Landing Page
 
-A visually captivating and minimalistic landing page for Co-evolve, a visionary AI company focused on evolving the human mind with AI.
+A modern, minimalist landing page for Co-evolve, a visionary AI company focused on evolving the human mind—not just through AI, but with AI.
+
+## Overview
+
+This landing page showcases Co-evolve's six key initiatives:
+
+- **Lindy**: Shifting the paradigm of human-AI interaction toward continuous, personal, and intuitive knowledge
+- **Capybara**: Reimagining digital presence for a world where language models mediate understanding
+- **Minary**: Transforming work architecture by organizing around meaning, not format
+- **Suddenly**: Accelerating AI transformation where it's needed most
+- **Human Intelligence**: Pursuing effortless interaction between humans and AI systems
+- **Solid Intelligence**: Envisioning ambient, embedded intelligence
 
 ## Features
 
-- Elegant minimalist design with "Co-evolve" at the center
-- Six floating, interactive initiatives that orbit around the center
-- Neural network background effect connecting initiatives
-- Modal popups with detailed descriptions
-- Fully responsive design that works across devices
+- Clean, modern design inspired by contemporary tech company websites
+- Responsive layout that works across devices
+- Subtle background particle animations
+- Modal windows for detailed initiative information
+- SVG illustrations and diagrams
 
-## Setup
+## Technologies Used
 
-1. Clone this repository
-2. Open `index.html` in your browser to view the landing page
+- Vanilla HTML, CSS, and JavaScript
+- No frameworks or build tools required
+- SVG graphics for illustrations
+- CSS Grid and Flexbox for responsive layouts
 
-No build tools or dependencies are required. This is a pure HTML, CSS, and JavaScript implementation.
+## Deployment
 
-## Deployment to GitHub Pages
+This site is designed to be deployed to GitHub Pages:
 
-To deploy this landing page to GitHub Pages:
-
-1. Create a new GitHub repository
-2. Push the contents of this folder to the repository
-3. Go to repository Settings > Pages
-4. Under "Source", select "main" (or "master") branch
-5. Click "Save" to deploy
-6. Your site will be published at `https://[your-username].github.io/[repository-name]/`
+1. Push the content to a GitHub repository
+2. Go to Settings > Pages
+3. Select the branch (usually `main`) to deploy from
+4. The site will be published at `https://[username].github.io/[repository-name]/`
 
 ## Local Development
 
-To make changes:
+To run this site locally:
 
-1. Edit the HTML, CSS, or JavaScript files as needed
-2. Refresh your browser to see changes
+1. Clone the repository
+2. Open `index.html` in your browser
+3. No build steps or server setup required
 
-## Customization
+## Credits
 
-- Colors: Edit the CSS variables in `styles.css` to change the color scheme
-- Content: Modify the initiative descriptions in the JavaScript file
-- Layout: Adjust the size and positioning in CSS as needed
+- Fonts: [Inter](https://fonts.google.com/specimen/Inter) from Google Fonts
+- Icons: Custom SVG elements
+- Background animation: Custom JavaScript canvas implementation
 
 ## License
 

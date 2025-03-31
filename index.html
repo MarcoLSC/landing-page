@@ -7,91 +7,218 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <div class="center-logo">
-            <div class="logo-container">
-                <div class="logo-circle">
-                    <div class="logo-inner">
-                        <svg viewBox="0 0 100 100" class="logo">
-                            <circle cx="50" cy="50" r="40" class="logo-bg" />
-                            <path class="logo-path" d="M30,50 C30,38.954 38.954,30 50,30 C61.046,30 70,38.954 70,50 C70,61.046 61.046,70 50,70" />
-                            <path class="logo-path" d="M50,70 C38.954,70 30,61.046 30,50" />
-                        </svg>
+        <header>
+            <div class="logo">
+                <svg viewBox="0 0 100 100" class="logo-svg">
+                    <circle cx="50" cy="50" r="40" class="logo-bg" />
+                    <path class="logo-path" d="M30,50 C30,38.954 38.954,30 50,30 C61.046,30 70,38.954 70,50 C70,61.046 61.046,70 50,70" />
+                    <path class="logo-path" d="M50,70 C38.954,70 30,61.046 30,50" />
+                </svg>
+                <span>Co-evolve</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#initiatives">Initiatives</a></li>
+                    <li><a href="#how-it-works">How it works</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </nav>
+            <div class="nav-buttons">
+                <a href="#contact" class="btn-secondary">Contact</a>
+                <a href="#featured" class="btn-primary">Featured Work</a>
+            </div>
+        </header>
+
+        <main>
+            <section class="hero">
+                <h1>Co-evolve is evolving the human mind—not just through AI, but with AI.</h1>
+                <p class="subtitle">A visionary AI company creating intelligent systems that amplify human potential through seamless, intuitive collaboration. We build systems that evolve with you.</p>
+                <div class="cta-buttons">
+                    <a href="#initiatives" class="btn-primary">Explore Initiatives</a>
+                    <a href="#contact" class="btn-secondary">Get in Touch</a>
+                </div>
+            </section>
+
+            <section id="initiatives" class="initiatives">
+                <h2>Initiatives</h2>
+                <div class="initiatives-grid">
+                    <div class="initiative-card" data-color="golden">
+                        <div class="card-content">
+                            <h3>Lindy</h3>
+                            <p>Shifting the paradigm of how humans and AI interact—toward continuous, personal, and intuitive knowledge.</p>
+                            <div class="learn-more">
+                                <span>Learn more</span>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="initiative-card" data-color="purple">
+                        <div class="card-content">
+                            <h3>Capybara</h3>
+                            <p>Reimagining digital presence for a world where language models mediate understanding.</p>
+                            <div class="learn-more">
+                                <span>Learn more</span>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="initiative-card" data-color="lightblue">
+                        <div class="card-content">
+                            <h3>Minary</h3>
+                            <p>Transforming the architecture of work by organizing it around meaning, not format.</p>
+                            <div class="learn-more">
+                                <span>Learn more</span>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="initiative-card" data-color="salmon">
+                        <div class="card-content">
+                            <h3>Suddenly</h3>
+                            <p>"Gradually, then suddenly"—accelerating AI transformation where it's needed most.</p>
+                            <div class="learn-more">
+                                <span>Learn more</span>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="initiative-card" data-color="red">
+                        <div class="card-content">
+                            <h3>Human Intelligence</h3>
+                            <p>Pursuing the art of effortless interaction between humans and intelligent systems.</p>
+                            <div class="learn-more">
+                                <span>Learn more</span>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="initiative-card" data-color="black">
+                        <div class="card-content">
+                            <h3>Solid Intelligence</h3>
+                            <p>Envisioning a world where intelligence is ambient, embedded, and silent.</p>
+                            <div class="learn-more">
+                                <span>Learn more</span>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M6 12L10 8L6 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <h1>Co-evolve</h1>
-            </div>
-            <div class="center-description">
-                <p>A visionary AI company focused on evolving the human mind—not just through AI, but with AI. We create intelligent systems that amplify human potential through seamless, intuitive collaboration.</p>
-            </div>
-        </div>
-        
-        <div class="initiatives">
-            <div class="initiative" data-color="golden" data-name="Lindy">
-                <div class="initiative-inner">
-                    <div class="initiative-backdrop"></div>
-                    <div class="initiative-content">
-                        <h3>Lindy</h3>
-                        <p class="mission">Shifting the paradigm of how humans and AI interact—toward continuous, personal, and intuitive knowledge.</p>
+            </section>
+
+            <section id="how-it-works" class="how-it-works">
+                <h2>How It Works</h2>
+                <div class="diagram">
+                    <img src="assets/diagram.svg" alt="Diagram showing how Co-evolve's AI integration works">
+                </div>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Human-AI Integration</h3>
+                        <p>Our systems learn continuously from your interaction patterns, adapting to your unique cognitive style.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Knowledge Synthesis</h3>
+                        <p>Connecting disparate ideas and information sources to create meaningful, contextual understanding.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Ambient Intelligence</h3>
+                        <p>Seamlessly integrating AI capabilities into your environment, enhancing rather than replacing human thought.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="featured" class="featured">
+                <h2>Featured Work</h2>
+                <div class="featured-content">
+                    <div class="featured-image">
+                        <img src="assets/featured.jpg" alt="Co-evolve featured project">
+                    </div>
+                    <div class="featured-text">
+                        <h3>Continuous Evolution</h3>
+                        <p>We're currently focused on developing systems that evolve alongside human cognition, creating a symbiotic relationship between AI and human intelligence.</p>
+                        <p>Our initiatives work in harmony to create an ecosystem where technology adapts to human needs, not the other way around.</p>
+                        <div class="cta-buttons">
+                            <a href="#contact" class="btn-primary">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <svg viewBox="0 0 100 100" class="logo-svg small">
+                        <circle cx="50" cy="50" r="40" class="logo-bg" />
+                        <path class="logo-path" d="M30,50 C30,38.954 38.954,30 50,30 C61.046,30 70,38.954 70,50 C70,61.046 61.046,70 50,70" />
+                        <path class="logo-path" d="M50,70 C38.954,70 30,61.046 30,50" />
+                    </svg>
+                    <span>Co-evolve</span>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Initiatives</h4>
+                        <ul>
+                            <li><a href="#">Lindy</a></li>
+                            <li><a href="#">Capybara</a></li>
+                            <li><a href="#">Minary</a></li>
+                            <li><a href="#">Suddenly</a></li>
+                            <li><a href="#">Human Intelligence</a></li>
+                            <li><a href="#">Solid Intelligence</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Connect</h4>
+                        <ul>
+                            <li><a href="#">Twitter</a></li>
+                            <li><a href="#">LinkedIn</a></li>
+                            <li><a href="#">GitHub</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
-            
-            <div class="initiative" data-color="purple" data-name="Capybara">
-                <div class="initiative-inner">
-                    <div class="initiative-backdrop"></div>
-                    <div class="initiative-content">
-                        <h3>Capybara</h3>
-                        <p class="mission">Reimagining digital presence for a world where language models mediate understanding.</p>
-                    </div>
+            <div class="footer-bottom">
+                <p>© 2025 Co-evolve. All rights reserved.</p>
+                <div class="footer-legal">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
                 </div>
             </div>
-            
-            <div class="initiative" data-color="lightblue" data-name="Minary">
-                <div class="initiative-inner">
-                    <div class="initiative-backdrop"></div>
-                    <div class="initiative-content">
-                        <h3>Minary</h3>
-                        <p class="mission">Transforming the architecture of work by organizing it around meaning, not format.</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="initiative" data-color="salmon" data-name="Suddenly">
-                <div class="initiative-inner">
-                    <div class="initiative-backdrop"></div>
-                    <div class="initiative-content">
-                        <h3>Suddenly</h3>
-                        <p class="mission">"Gradually, then suddenly"—accelerating AI transformation where it's needed most.</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="initiative" data-color="red" data-name="Human Intelligence">
-                <div class="initiative-inner">
-                    <div class="initiative-backdrop"></div>
-                    <div class="initiative-content">
-                        <h3>Human Intelligence</h3>
-                        <p class="mission">Pursuing the art of effortless interaction between humans and intelligent systems.</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="initiative" data-color="black" data-name="Solid Intelligence">
-                <div class="initiative-inner">
-                    <div class="initiative-backdrop"></div>
-                    <div class="initiative-content">
-                        <h3>Solid Intelligence</h3>
-                        <p class="mission">Envisioning a world where intelligence is ambient, embedded, and silent.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </footer>
     </div>
-    
+
     <div class="modal" id="modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
@@ -103,7 +230,7 @@
         </div>
     </div>
     
-    <canvas id="neural-network"></canvas>
+    <canvas id="background-canvas"></canvas>
     
     <script src="script.js"></script>
 </body>

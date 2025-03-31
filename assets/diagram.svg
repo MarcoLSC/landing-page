@@ -1,0 +1,51 @@
+<svg width="800" height="400" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background -->
+    <rect width="800" height="400" fill="#F5F5FF" rx="8" />
+    
+    <!-- Center Brain -->
+    <circle cx="400" cy="200" r="80" fill="#F0EDFF" stroke="#6F5CFA" stroke-width="2" />
+    <path d="M370,180 C370,160 385,145 400,145 C415,145 430,160 430,180 C430,200 415,215 400,215" stroke="#6F5CFA" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    <path d="M400,215 C385,215 370,200 370,180" stroke="#6F5CFA" stroke-width="2.5" fill="none" stroke-linecap="round" />
+    
+    <!-- Left Human -->
+    <circle cx="180" cy="200" r="60" fill="#F0F0F0" stroke="#555561" stroke-width="1.5" />
+    <path d="M160,175 C160,175 170,165 180,165 C190,165 200,175 200,175" stroke="#555561" stroke-width="2" fill="none" />
+    <circle cx="170" cy="190" r="3" fill="#555561" />
+    <circle cx="190" cy="190" r="3" fill="#555561" />
+    <path d="M165,210 C165,210 175,220 180,220 C185,220 195,210 195,210" stroke="#555561" stroke-width="2" fill="none" />
+    
+    <!-- Right AI System -->
+    <rect x="540" y="140" width="120" height="120" rx="8" fill="#F0F0F0" stroke="#555561" stroke-width="1.5" />
+    <circle cx="600" cy="170" r="15" fill="#E6E6E6" stroke="#555561" stroke-width="1.5" />
+    <path d="M585,200 L615,200" stroke="#555561" stroke-width="1.5" />
+    <path d="M585,215 L615,215" stroke="#555561" stroke-width="1.5" />
+    <path d="M585,230 L605,230" stroke="#555561" stroke-width="1.5" />
+    
+    <!-- Connection Lines -->
+    <path d="M240,200 L320,200" stroke="#6F5CFA" stroke-width="2" stroke-dasharray="6 4" />
+    <path d="M480,200 L540,200" stroke="#6F5CFA" stroke-width="2" stroke-dasharray="6 4" />
+    
+    <!-- Connection Points -->
+    <circle cx="240" cy="200" r="5" fill="#6F5CFA" />
+    <circle cx="320" cy="200" r="5" fill="#6F5CFA" />
+    <circle cx="480" cy="200" r="5" fill="#6F5CFA" />
+    <circle cx="540" cy="200" r="5" fill="#6F5CFA" />
+    
+    <!-- Labels -->
+    <text x="180" y="280" font-family="Inter, sans-serif" font-size="16" fill="#1A1A1F" text-anchor="middle">Human</text>
+    <text x="400" y="280" font-family="Inter, sans-serif" font-size="16" fill="#1A1A1F" text-anchor="middle">Co-evolve</text>
+    <text x="600" y="280" font-family="Inter, sans-serif" font-size="16" fill="#1A1A1F" text-anchor="middle">AI Systems</text>
+    
+    <!-- Flow Arrows -->
+    <path d="M295,190 L320,200 L295,210" stroke="#6F5CFA" stroke-width="2" fill="none" />
+    <path d="M515,190 L540,200 L515,210" stroke="#6F5CFA" stroke-width="2" fill="none" />
+    
+    <!-- Circular Arrows Around Brain -->
+    <path d="M400,100 A100,100 0 0,1 500,200" stroke="#6F5CFA" stroke-width="2" fill="none" stroke-dasharray="4 4" />
+    <path d="M500,200 A100,100 0 0,1 400,300" stroke="#6F5CFA" stroke-width="2" fill="none" stroke-dasharray="4 4" />
+    <path d="M400,300 A100,100 0 0,1 300,200" stroke="#6F5CFA" stroke-width="2" fill="none" stroke-dasharray="4 4" />
+    <path d="M300,200 A100,100 0 0,1 400,100" stroke="#6F5CFA" stroke-width="2" fill="none" stroke-dasharray="4 4" />
+    
+    <!-- Circular Arrow Heads -->
+    <path d="M395,108 L400,100 L405,108" stroke="#6F5CFA" stroke-width="2" fill="none" />
+</svg> 
