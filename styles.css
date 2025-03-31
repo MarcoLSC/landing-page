@@ -220,23 +220,88 @@ nav ul li a:hover {
     margin-top: 1rem;
 }
 
+.code-animation-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    height: 350px;
+}
+
 .code-snippet {
     background-color: #F7F7F7;
     border: 1px solid var(--border-light);
     border-radius: 8px;
     padding: 1.5rem;
     width: 100%;
-    max-width: 500px;
+    height: 100%;
     font-family: 'Space Mono', monospace;
     font-size: 0.9rem;
     line-height: 1.5;
     color: #333;
-    overflow-x: auto;
+    overflow: hidden;
     box-shadow: var(--shadow-sm);
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: opacity 0.5s ease-out;
+}
+
+.code-snippet.fade-out {
+    opacity: 0;
 }
 
 .code-snippet code {
     white-space: pre;
+}
+
+.animation-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.animation-container.fade-in {
+    opacity: 1;
+}
+
+/* About Section */
+.about {
+    padding: 6rem 0;
+    background-color: #FAFAFA;
+    border-top: 1px solid var(--border-light);
+}
+
+.about-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.about-content h2 {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.about-content p {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    line-height: 1.7;
+}
+
+.contact-info {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-light);
+    text-align: center;
+}
+
+.contact-info a {
+    font-weight: 500;
 }
 
 /* Initiatives Section */
@@ -260,16 +325,59 @@ nav ul li a:hover {
     border-radius: 0; /* Square edges */
     border: 1px solid var(--border-light);
     overflow: hidden;
-    transition: all 0.2s ease-in-out;
+    transition: all 0.3s ease-in-out;
     background-color: white;
     box-shadow: var(--shadow-card);
     position: relative;
 }
 
+/* Individual card theme colors and hover effects */
+.initiative-card[data-color="golden"] {
+    --theme-color: var(--golden);
+}
+
+.initiative-card[data-color="purple"] {
+    --theme-color: var(--purple);
+}
+
+.initiative-card[data-color="lightblue"] {
+    --theme-color: var(--lightblue);
+}
+
+.initiative-card[data-color="salmon"] {
+    --theme-color: var(--salmon);
+}
+
+.initiative-card[data-color="red"] {
+    --theme-color: var(--red);
+}
+
+.initiative-card[data-color="black"] {
+    --theme-color: var(--black);
+}
+
 .initiative-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
-    border-color: #D0D0D6;
+    border-color: var(--theme-color);
+}
+
+.initiative-card:hover .initiative-icon svg path,
+.initiative-card:hover .initiative-icon svg circle,
+.initiative-card:hover .initiative-icon svg rect {
+    stroke: var(--theme-color);
+}
+
+.initiative-card:hover .initiative-icon svg circle.filled {
+    fill: var(--theme-color);
+}
+
+.initiative-card:hover h3 {
+    color: var(--theme-color);
+}
+
+.initiative-card:hover .learn-more {
+    color: var(--theme-color);
 }
 
 .card-content {
@@ -280,21 +388,11 @@ nav ul li a:hover {
     margin-bottom: 1.5rem;
 }
 
-.initiative-icon svg path, 
-.initiative-icon svg circle, 
-.initiative-icon svg rect {
-    stroke: var(--accent);
-}
-
-.initiative-card[data-color="purple"] .initiative-icon svg path,
-.initiative-card[data-color="purple"] .initiative-icon svg circle {
-    stroke: var(--purple);
-}
-
 .initiative-card h3 {
     margin-bottom: 1rem;
     font-weight: 600;
     color: var(--text-primary);
+    transition: color 0.3s ease;
 }
 
 .initiative-card p {
@@ -309,10 +407,7 @@ nav ul li a:hover {
     color: var(--accent);
     font-weight: 500;
     cursor: pointer;
-}
-
-.initiative-card[data-color="purple"] .learn-more {
-    color: var(--purple);
+    transition: color 0.3s ease;
 }
 
 .learn-more svg {
@@ -322,19 +417,6 @@ nav ul li a:hover {
 
 .initiative-card:hover .learn-more svg {
     transform: translateX(0.25rem);
-}
-
-/* Initiative card colors - only keep purple as colored */
-.initiative-card[data-color="golden"] h3,
-.initiative-card[data-color="lightblue"] h3,
-.initiative-card[data-color="salmon"] h3,
-.initiative-card[data-color="red"] h3,
-.initiative-card[data-color="black"] h3 {
-    color: var(--text-primary);
-}
-
-.initiative-card[data-color="purple"] h3 {
-    color: var(--purple);
 }
 
 /* Footer */
@@ -492,6 +574,21 @@ footer {
     pointer-events: none;
 }
 
+/* Typing cursor animation */
+.typing-cursor {
+    display: inline-block;
+    width: 0.5em;
+    height: 1.2em;
+    background-color: #333;
+    margin-left: 2px;
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
 /* Responsive styles */
 @media (max-width: 992px) {
     .footer-content {
@@ -512,6 +609,10 @@ footer {
     
     .subtitle {
         font-size: 1.2rem;
+    }
+    
+    .code-animation-container {
+        height: 300px;
     }
 }
 
@@ -566,5 +667,9 @@ footer {
     
     .code-snippet {
         font-size: 0.8rem;
+    }
+    
+    .code-animation-container {
+        height: 250px;
     }
 } 
