@@ -57,7 +57,23 @@ function setupCardInteractions() {
         
         // Make the entire card clickable
         card.addEventListener('click', () => {
-            const details = initiativeDetails[title];
+            // Find the matching initiative detail
+            let details;
+            // First try exact match
+            if (initiativeDetails[title]) {
+                details = initiativeDetails[title];
+            } else {
+                // Try to find by partial match (for "Suddenly" vs "Suddenly AI")
+                const detailsKey = Object.keys(initiativeDetails).find(key => 
+                    key.includes(title) || title.includes(key)
+                );
+                details = detailsKey ? initiativeDetails[detailsKey] : null;
+            }
+            
+            if (!details) {
+                console.error(`No details found for initiative: ${title}`);
+                return;
+            }
             
             // Set modal content with the appropriate theme color
             document.getElementById('modal-title').textContent = title;
