@@ -14,12 +14,21 @@
     --background: #0A0A14;
     --text-primary: rgba(255, 255, 255, 0.95);
     --text-secondary: rgba(255, 255, 255, 0.7);
+    --bubble-size: 150px;
+    --bubble-hover-size: 240px;
+    --bubble-transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+    --perspective: 1000px;
 }
 
 @keyframes gradientShift {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
+}
+
+@keyframes rotateGlow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 body {
@@ -33,12 +42,14 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    perspective: var(--perspective);
 }
 
 .container {
     position: relative;
     width: 100%;
     height: 100vh;
+    transform-style: preserve-3d;
 }
 
 .center-logo {
@@ -48,25 +59,114 @@ body {
     transform: translate(-50%, -50%);
     z-index: 10;
     text-align: center;
-    width: 300px;
-    height: 300px;
+    width: 320px;
+    height: 320px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: radial-gradient(circle at center, rgba(30, 30, 50, 0.3), rgba(10, 10, 20, 0));
     border-radius: 50%;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    transform-style: preserve-3d;
+}
+
+.logo-container {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+}
+
+.center-logo:hover .logo-container {
+    transform: translateZ(20px);
+}
+
+.center-logo:hover .center-description {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.logo-circle {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 15px;
+    position: relative;
+    transform-style: preserve-3d;
+}
+
+.logo-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: translateZ(10px);
+}
+
+.logo-inner::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.15), transparent 70%);
+    opacity: 0.8;
+    z-index: -1;
+    animation: rotateGlow 20s linear infinite;
+}
+
+.logo {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+}
+
+.logo-bg {
+    fill: rgba(30, 30, 50, 0.5);
+    stroke: rgba(255, 255, 255, 0.3);
+    stroke-width: 1;
+}
+
+.logo-path {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.9);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: dash 3s ease-in-out forwards;
+}
+
+@keyframes dash {
+    to {
+        stroke-dashoffset: 0;
+    }
 }
 
 .center-logo h1 {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 300;
-    font-size: 4rem;
+    font-size: 3.2rem;
     letter-spacing: 0.2rem;
     color: var(--text-primary);
     text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
     opacity: 0;
     animation: fadeIn 2s ease-in-out forwards, glow 8s ease-in-out infinite;
+    transform: translateZ(30px);
+    margin-bottom: 15px;
+}
+
+.center-description {
+    opacity: 0;
+    max-width: 280px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
     transform: translateY(10px);
+    transition: all 0.5s ease;
+    font-weight: 300;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 @keyframes fadeIn {
@@ -85,12 +185,14 @@ body {
     height: 100%;
     top: 0;
     left: 0;
+    transform-style: preserve-3d;
+    transform: translateZ(-50px);
 }
 
 .initiative {
     position: absolute;
-    width: 130px;
-    height: 130px;
+    width: var(--bubble-size);
+    height: var(--bubble-size);
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -98,9 +200,10 @@ body {
     cursor: pointer;
     opacity: 0;
     animation: fadeIn 2s ease-in-out forwards;
-    transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
+    transition: var(--bubble-transition);
+    transform-style: preserve-3d;
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3));
+    z-index: 5;
 }
 
 .initiative-inner {
@@ -111,19 +214,68 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 15px;
-    text-align: center;
+    position: relative;
     overflow: hidden;
-    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    transform-style: preserve-3d;
+    transform: rotateY(10deg) rotateX(5deg);
+    transition: var(--bubble-transition);
+}
+
+.initiative-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    transform-style: preserve-3d;
+}
+
+.initiative-backdrop::before, 
+.initiative-backdrop::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+}
+
+.initiative-backdrop::before {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.initiative-backdrop::after {
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    z-index: -2;
+    filter: blur(5px);
+}
+
+.initiative-content {
+    padding: 20px;
+    text-align: center;
+    z-index: 1;
+    transform-style: preserve-3d;
+    transition: var(--bubble-transition);
+    transform: translateZ(20px);
 }
 
 .initiative h3 {
     font-family: 'Cormorant Garamond', serif;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-weight: 400;
-    margin-bottom: 5px;
     transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
     opacity: 0.9;
+    margin-bottom: 5px;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    transform-style: preserve-3d;
+    transform: translateZ(10px);
 }
 
 .initiative .mission {
@@ -131,105 +283,169 @@ body {
     height: 0;
     font-size: 0;
     transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    transform: translateZ(10px);
 }
 
 .initiative:hover {
-    width: 230px;
-    height: 230px;
+    width: var(--bubble-hover-size);
+    height: var(--bubble-hover-size);
     z-index: 20;
-    transform: scale(1.05);
+    transform: scale(1.05) translateZ(30px);
+}
+
+.initiative:hover .initiative-inner {
+    transform: rotateY(0deg) rotateX(0deg);
+}
+
+.initiative:hover .initiative-content {
+    transform: translateZ(40px);
 }
 
 .initiative:hover .mission {
     opacity: 1;
     height: auto;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     margin-top: 15px;
     line-height: 1.5;
     letter-spacing: 0.01rem;
     color: var(--text-secondary);
     font-weight: 300;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .initiative:hover h3 {
-    font-size: 1.6rem;
-    margin-bottom: 10px;
+    font-size: 1.7rem;
+    margin-bottom: 12px;
     opacity: 1;
 }
 
 /* Initiative colors */
-.initiative[data-color="golden"] {
-    background: radial-gradient(circle at 30% 20%, rgba(230, 192, 104, 0.25), rgba(230, 192, 104, 0.05));
-    box-shadow: 0 0 40px rgba(230, 192, 104, 0.15), inset 0 0 20px rgba(230, 192, 104, 0.1);
+.initiative[data-color="golden"] .initiative-backdrop::before {
+    background: radial-gradient(circle at 30% 20%, rgba(230, 192, 104, 0.3), rgba(230, 192, 104, 0.05));
+    box-shadow: 
+        inset 0 0 30px rgba(230, 192, 104, 0.2),
+        0 5px 15px -5px rgba(230, 192, 104, 0.4),
+        0 0 40px -10px rgba(230, 192, 104, 0.6);
 }
-.initiative[data-color="golden"]:hover {
-    background: radial-gradient(circle at 30% 20%, rgba(230, 192, 104, 0.3), rgba(230, 192, 104, 0.1));
-    box-shadow: 0 0 60px rgba(230, 192, 104, 0.2), inset 0 0 30px rgba(230, 192, 104, 0.1);
+.initiative[data-color="golden"] .initiative-backdrop::after {
+    background: radial-gradient(circle at 30% 20%, rgba(230, 192, 104, 0.4), rgba(230, 192, 104, 0));
+}
+.initiative[data-color="golden"]:hover .initiative-backdrop::before {
+    background: radial-gradient(circle at 30% 20%, rgba(230, 192, 104, 0.4), rgba(230, 192, 104, 0.1));
+    box-shadow: 
+        inset 0 0 40px rgba(230, 192, 104, 0.3),
+        0 10px 20px -5px rgba(230, 192, 104, 0.6),
+        0 0 60px -10px rgba(230, 192, 104, 0.8);
 }
 .initiative[data-color="golden"] h3 {
     color: rgba(230, 192, 104, 0.95);
     text-shadow: 0 0 10px rgba(230, 192, 104, 0.3);
 }
 
-.initiative[data-color="purple"] {
-    background: radial-gradient(circle at 30% 20%, rgba(146, 119, 255, 0.25), rgba(146, 119, 255, 0.05));
-    box-shadow: 0 0 40px rgba(146, 119, 255, 0.15), inset 0 0 20px rgba(146, 119, 255, 0.1);
+.initiative[data-color="purple"] .initiative-backdrop::before {
+    background: radial-gradient(circle at 30% 20%, rgba(146, 119, 255, 0.3), rgba(146, 119, 255, 0.05));
+    box-shadow: 
+        inset 0 0 30px rgba(146, 119, 255, 0.2),
+        0 5px 15px -5px rgba(146, 119, 255, 0.4),
+        0 0 40px -10px rgba(146, 119, 255, 0.6);
 }
-.initiative[data-color="purple"]:hover {
-    background: radial-gradient(circle at 30% 20%, rgba(146, 119, 255, 0.3), rgba(146, 119, 255, 0.1));
-    box-shadow: 0 0 60px rgba(146, 119, 255, 0.2), inset 0 0 30px rgba(146, 119, 255, 0.1);
+.initiative[data-color="purple"] .initiative-backdrop::after {
+    background: radial-gradient(circle at 30% 20%, rgba(146, 119, 255, 0.4), rgba(146, 119, 255, 0));
+}
+.initiative[data-color="purple"]:hover .initiative-backdrop::before {
+    background: radial-gradient(circle at 30% 20%, rgba(146, 119, 255, 0.4), rgba(146, 119, 255, 0.1));
+    box-shadow: 
+        inset 0 0 40px rgba(146, 119, 255, 0.3),
+        0 10px 20px -5px rgba(146, 119, 255, 0.6),
+        0 0 60px -10px rgba(146, 119, 255, 0.8);
 }
 .initiative[data-color="purple"] h3 {
     color: rgba(146, 119, 255, 0.95);
     text-shadow: 0 0 10px rgba(146, 119, 255, 0.3);
 }
 
-.initiative[data-color="lightblue"] {
-    background: radial-gradient(circle at 30% 20%, rgba(103, 212, 248, 0.25), rgba(103, 212, 248, 0.05));
-    box-shadow: 0 0 40px rgba(103, 212, 248, 0.15), inset 0 0 20px rgba(103, 212, 248, 0.1);
+.initiative[data-color="lightblue"] .initiative-backdrop::before {
+    background: radial-gradient(circle at 30% 20%, rgba(103, 212, 248, 0.3), rgba(103, 212, 248, 0.05));
+    box-shadow: 
+        inset 0 0 30px rgba(103, 212, 248, 0.2),
+        0 5px 15px -5px rgba(103, 212, 248, 0.4),
+        0 0 40px -10px rgba(103, 212, 248, 0.6);
 }
-.initiative[data-color="lightblue"]:hover {
-    background: radial-gradient(circle at 30% 20%, rgba(103, 212, 248, 0.3), rgba(103, 212, 248, 0.1));
-    box-shadow: 0 0 60px rgba(103, 212, 248, 0.2), inset 0 0 30px rgba(103, 212, 248, 0.1);
+.initiative[data-color="lightblue"] .initiative-backdrop::after {
+    background: radial-gradient(circle at 30% 20%, rgba(103, 212, 248, 0.4), rgba(103, 212, 248, 0));
+}
+.initiative[data-color="lightblue"]:hover .initiative-backdrop::before {
+    background: radial-gradient(circle at 30% 20%, rgba(103, 212, 248, 0.4), rgba(103, 212, 248, 0.1));
+    box-shadow: 
+        inset 0 0 40px rgba(103, 212, 248, 0.3),
+        0 10px 20px -5px rgba(103, 212, 248, 0.6),
+        0 0 60px -10px rgba(103, 212, 248, 0.8);
 }
 .initiative[data-color="lightblue"] h3 {
     color: rgba(103, 212, 248, 0.95);
     text-shadow: 0 0 10px rgba(103, 212, 248, 0.3);
 }
 
-.initiative[data-color="salmon"] {
-    background: radial-gradient(circle at 30% 20%, rgba(255, 141, 120, 0.25), rgba(255, 141, 120, 0.05));
-    box-shadow: 0 0 40px rgba(255, 141, 120, 0.15), inset 0 0 20px rgba(255, 141, 120, 0.1);
+.initiative[data-color="salmon"] .initiative-backdrop::before {
+    background: radial-gradient(circle at 30% 20%, rgba(255, 141, 120, 0.3), rgba(255, 141, 120, 0.05));
+    box-shadow: 
+        inset 0 0 30px rgba(255, 141, 120, 0.2),
+        0 5px 15px -5px rgba(255, 141, 120, 0.4),
+        0 0 40px -10px rgba(255, 141, 120, 0.6);
 }
-.initiative[data-color="salmon"]:hover {
-    background: radial-gradient(circle at 30% 20%, rgba(255, 141, 120, 0.3), rgba(255, 141, 120, 0.1));
-    box-shadow: 0 0 60px rgba(255, 141, 120, 0.2), inset 0 0 30px rgba(255, 141, 120, 0.1);
+.initiative[data-color="salmon"] .initiative-backdrop::after {
+    background: radial-gradient(circle at 30% 20%, rgba(255, 141, 120, 0.4), rgba(255, 141, 120, 0));
+}
+.initiative[data-color="salmon"]:hover .initiative-backdrop::before {
+    background: radial-gradient(circle at 30% 20%, rgba(255, 141, 120, 0.4), rgba(255, 141, 120, 0.1));
+    box-shadow: 
+        inset 0 0 40px rgba(255, 141, 120, 0.3),
+        0 10px 20px -5px rgba(255, 141, 120, 0.6),
+        0 0 60px -10px rgba(255, 141, 120, 0.8);
 }
 .initiative[data-color="salmon"] h3 {
     color: rgba(255, 141, 120, 0.95);
     text-shadow: 0 0 10px rgba(255, 141, 120, 0.3);
 }
 
-.initiative[data-color="red"] {
-    background: radial-gradient(circle at 30% 20%, rgba(217, 79, 79, 0.25), rgba(217, 79, 79, 0.05));
-    box-shadow: 0 0 40px rgba(217, 79, 79, 0.15), inset 0 0 20px rgba(217, 79, 79, 0.1);
+.initiative[data-color="red"] .initiative-backdrop::before {
+    background: radial-gradient(circle at 30% 20%, rgba(217, 79, 79, 0.3), rgba(217, 79, 79, 0.05));
+    box-shadow: 
+        inset 0 0 30px rgba(217, 79, 79, 0.2),
+        0 5px 15px -5px rgba(217, 79, 79, 0.4),
+        0 0 40px -10px rgba(217, 79, 79, 0.6);
 }
-.initiative[data-color="red"]:hover {
-    background: radial-gradient(circle at 30% 20%, rgba(217, 79, 79, 0.3), rgba(217, 79, 79, 0.1));
-    box-shadow: 0 0 60px rgba(217, 79, 79, 0.2), inset 0 0 30px rgba(217, 79, 79, 0.1);
+.initiative[data-color="red"] .initiative-backdrop::after {
+    background: radial-gradient(circle at 30% 20%, rgba(217, 79, 79, 0.4), rgba(217, 79, 79, 0));
+}
+.initiative[data-color="red"]:hover .initiative-backdrop::before {
+    background: radial-gradient(circle at 30% 20%, rgba(217, 79, 79, 0.4), rgba(217, 79, 79, 0.1));
+    box-shadow: 
+        inset 0 0 40px rgba(217, 79, 79, 0.3),
+        0 10px 20px -5px rgba(217, 79, 79, 0.6),
+        0 0 60px -10px rgba(217, 79, 79, 0.8);
 }
 .initiative[data-color="red"] h3 {
     color: rgba(217, 79, 79, 0.95);
     text-shadow: 0 0 10px rgba(217, 79, 79, 0.3);
 }
 
-.initiative[data-color="black"] {
-    background: radial-gradient(circle at 30% 20%, rgba(42, 42, 47, 0.7), rgba(32, 32, 37, 0.4));
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.05);
+.initiative[data-color="black"] .initiative-backdrop::before {
+    background: radial-gradient(circle at 30% 20%, rgba(50, 50, 60, 0.7), rgba(30, 30, 40, 0.4));
+    box-shadow: 
+        inset 0 0 30px rgba(0, 0, 0, 0.5),
+        0 5px 15px -5px rgba(0, 0, 0, 0.6),
+        0 0 40px -10px rgba(0, 0, 0, 0.8);
 }
-.initiative[data-color="black"]:hover {
-    background: radial-gradient(circle at 30% 20%, rgba(50, 50, 55, 0.8), rgba(40, 40, 45, 0.5));
-    box-shadow: 0 0 60px rgba(0, 0, 0, 0.4), inset 0 0 30px rgba(255, 255, 255, 0.07);
+.initiative[data-color="black"] .initiative-backdrop::after {
+    background: radial-gradient(circle at 30% 20%, rgba(60, 60, 70, 0.5), rgba(30, 30, 40, 0));
+}
+.initiative[data-color="black"]:hover .initiative-backdrop::before {
+    background: radial-gradient(circle at 30% 20%, rgba(60, 60, 70, 0.8), rgba(40, 40, 50, 0.5));
+    box-shadow: 
+        inset 0 0 40px rgba(0, 0, 0, 0.6),
+        0 10px 20px -5px rgba(0, 0, 0, 0.8),
+        0 0 60px -10px rgba(0, 0, 0, 1);
 }
 .initiative[data-color="black"] h3 {
     color: rgba(255, 255, 255, 0.9);
@@ -350,31 +566,37 @@ body {
 
 /* Media queries for responsiveness */
 @media (max-width: 768px) {
+    :root {
+        --bubble-size: 100px;
+        --bubble-hover-size: 180px;
+    }
+
     .center-logo {
-        width: 200px;
-        height: 200px;
+        width: 250px;
+        height: 250px;
+    }
+    
+    .logo-circle {
+        width: 90px;
+        height: 90px;
+        margin-bottom: 10px;
     }
     
     .center-logo h1 {
-        font-size: 3rem;
+        font-size: 2.5rem;
     }
     
-    .initiative {
-        width: 90px;
-        height: 90px;
-    }
-    
-    .initiative:hover {
-        width: 180px;
-        height: 180px;
+    .center-description {
+        max-width: 220px;
+        font-size: 0.75rem;
     }
     
     .initiative h3 {
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
     
     .initiative:hover h3 {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
     }
     
     .initiative:hover .mission {
