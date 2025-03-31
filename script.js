@@ -63,6 +63,7 @@ function setupCardInteractions() {
             document.getElementById('modal-title').textContent = title;
             document.getElementById('modal-description').textContent = details.description;
             document.getElementById('modal-title').style.color = details.color;
+            document.querySelector('.modal-content').style.setProperty('--theme-color', details.color);
             
             // Show modal with animation
             modal.style.display = 'flex';
@@ -114,7 +115,7 @@ function setupTypingAnimation() {
     codeElement.innerHTML = '';
     
     let i = 0;
-    const speed = 20; // Much faster typing speed
+    const speed = 15; // Even faster typing speed
     
     function typeWriter() {
         if (i < codeSnippet.length) {
@@ -133,19 +134,19 @@ function setupTypingAnimation() {
             i++;
             
             // Random typing speed variation for more realistic effect
-            const randomSpeed = speed + Math.random() * 20; // Reduced randomness for faster typing
+            const randomSpeed = speed + Math.random() * 10; // Reduced randomness for faster typing
             setTimeout(typeWriter, randomSpeed);
         } else {
             // When typing is complete, transition to 3D animation after a short pause
             setTimeout(() => {
                 // Start transitioning characters to prepare for 3D
                 transformCodeToAnimation();
-            }, 300);
+            }, 200);
         }
     }
     
     // Start typing animation
-    setTimeout(typeWriter, 300);
+    setTimeout(typeWriter, 200);
 }
 
 function transformCodeToAnimation() {
@@ -153,23 +154,52 @@ function transformCodeToAnimation() {
     const codeContainer = document.getElementById('typing-code');
     const animationContainer = document.getElementById('animation-container');
     
-    // Animate each character to prepare for 3D transition
+    // More varied animations for characters to transform in different ways
+    const animations = [
+        { transform: 'translateY(-40px) rotate(45deg) scale(0)', opacity: 0 },
+        { transform: 'translateY(40px) rotate(-45deg) scale(0)', opacity: 0 },
+        { transform: 'translateX(-40px) scale(0)', opacity: 0 },
+        { transform: 'translateX(40px) scale(0)', opacity: 0 },
+        { transform: 'translateY(-30px) translateX(-30px) rotate(90deg) scale(0)', opacity: 0 },
+        { transform: 'translateY(30px) translateX(30px) rotate(-90deg) scale(0)', opacity: 0 },
+        { transform: 'translateY(-20px) translateX(20px) rotate(180deg) scale(0)', opacity: 0 },
+        { transform: 'translateY(20px) translateX(-20px) rotate(-180deg) scale(0)', opacity: 0 }
+    ];
+    
+    const colors = ['#E6C068', '#9277FF', '#67D4F8', '#FF8D78', '#D94F4F'];
+    
+    // Apply random transformations to each character with GSAP for smoother animations
     codeCharacters.forEach((char, index) => {
-        setTimeout(() => {
-            char.classList.add('transform-out');
-        }, index * 10); // Staggered effect
+        const animation = animations[Math.floor(Math.random() * animations.length)];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        // Set initial bright color
+        gsap.set(char, { color: color });
+        
+        // Create staggered, more impressive animation
+        gsap.to(char, {
+            ...animation,
+            duration: 0.8,
+            delay: index * 0.02,
+            ease: "power2.out"
+        });
     });
     
     // After characters animate out, transition containers
-    setTimeout(() => {
-        codeContainer.classList.add('fade-out');
-        animationContainer.classList.add('fade-in');
-        
-        // Show reset button after animation completes
-        setTimeout(() => {
-            document.getElementById('reset-animation').classList.add('visible');
-        }, 2000);
-    }, codeCharacters.length * 10 + 300);
+    gsap.to(codeContainer, {
+        opacity: 0,
+        duration: 0.5,
+        delay: codeCharacters.length * 0.02 + 0.2,
+        onComplete: () => {
+            codeContainer.classList.add('fade-out');
+            animationContainer.classList.add('fade-in');
+            
+            // Show reset button after animation completes
+            setTimeout(() => {
+                document.getElementById('reset-animation').classList.add('visible');
+            }, 1500);
+        }
+    });
 }
 
 function setupResetButton() {
@@ -306,153 +336,27 @@ function setup3DAnimation() {
     // Set camera position
     camera.position.z = 15;
     
-    // Create more detailed computer mesh
-    const computerGroup = new THREE.Group();
+    // Create a more detailed computer model
+    const computerGroup = createComputerModel();
     
-    // Monitor
-    const monitorGeometry = new THREE.BoxGeometry(5, 3, 0.2);
-    const monitorEdges = new THREE.EdgesGeometry(monitorGeometry);
-    const monitorLines = new THREE.LineSegments(
-        monitorEdges,
-        new THREE.LineBasicMaterial({ color: 0x333333, linewidth: 1 })
-    );
-    computerGroup.add(monitorLines);
+    // Create a more detailed human model
+    const humanGroup = createHumanModel();
     
-    // Screen inner details
-    const screenDetailsGeometry = new THREE.BufferGeometry();
-    const screenPoints = new Float32Array([
-        // Screen horizontal lines
-        -2, 1, 0.11,
-        2, 1, 0.11,
-        
-        -2, 0, 0.11,
-        2, 0, 0.11,
-        
-        -2, -1, 0.11,
-        2, -1, 0.11,
-        
-        // Screen vertical lines
-        -1, 1.4, 0.11,
-        -1, -1.4, 0.11,
-        
-        0, 1.4, 0.11,
-        0, -1.4, 0.11,
-        
-        1, 1.4, 0.11,
-        1, -1.4, 0.11,
-    ]);
-    screenDetailsGeometry.setAttribute('position', new THREE.BufferAttribute(screenPoints, 3));
-    const screenDetails = new THREE.LineSegments(
-        screenDetailsGeometry,
-        new THREE.LineBasicMaterial({ color: 0x333333, opacity: 0.3, transparent: true })
-    );
-    computerGroup.add(screenDetails);
-    
-    // Stand
-    const standGeometry = new THREE.BufferGeometry();
-    const standPoints = new Float32Array([
-        0, -1.5, 0,
-        0, -3, 0,
-        
-        -1.5, -3, 0,
-        1.5, -3, 0
-    ]);
-    standGeometry.setAttribute('position', new THREE.BufferAttribute(standPoints, 3));
-    const stand = new THREE.LineSegments(
-        standGeometry,
-        new THREE.LineBasicMaterial({ color: 0x333333 })
-    );
-    computerGroup.add(stand);
-    
-    // Create more detailed human figure mesh
-    const humanGroup = new THREE.Group();
-    
-    // Head - more detailed
-    const headGeometry = new THREE.CircleGeometry(1, 32);
-    const headEdges = new THREE.EdgesGeometry(headGeometry);
-    const head = new THREE.LineSegments(
-        headEdges,
-        new THREE.LineBasicMaterial({ color: 0x333333 })
-    );
-    head.position.y = 4;
-    humanGroup.add(head);
-    
-    // Add eyes
-    const eyesGeometry = new THREE.BufferGeometry();
-    const eyesPoints = new Float32Array([
-        // Left eye
-        -0.3, 4.2, 0.1,
-        -0.1, 4.2, 0.1,
-        
-        // Right eye
-        0.3, 4.2, 0.1,
-        0.1, 4.2, 0.1
-    ]);
-    eyesGeometry.setAttribute('position', new THREE.BufferAttribute(eyesPoints, 3));
-    const eyes = new THREE.LineSegments(
-        eyesGeometry,
-        new THREE.LineBasicMaterial({ color: 0x333333 })
-    );
-    humanGroup.add(eyes);
-    
-    // Body with more details
-    const bodyGeometry = new THREE.BufferGeometry();
-    const bodyPoints = new Float32Array([
-        // Neck
-        0, 4, 0,
-        0, 3, 0,
-        
-        // Shoulders
-        0, 3, 0,
-        -2, 2.5, 0,
-        
-        0, 3, 0,
-        2, 2.5, 0,
-        
-        // Torso
-        0, 3, 0,
-        0, 0, 0,
-        
-        // Arms - left with elbow
-        -2, 2.5, 0,
-        -2.5, 1.5, 0,
-        
-        -2.5, 1.5, 0,
-        -3.5, 0.5, 0,
-        
-        // Arms - right with elbow
-        2, 2.5, 0,
-        2.5, 1.5, 0,
-        
-        2.5, 1.5, 0,
-        3.5, 0.5, 0,
-        
-        // Legs with knees
-        0, 0, 0,
-        -1, -1.5, 0,
-        
-        -1, -1.5, 0,
-        -1.5, -3.5, 0,
-        
-        0, 0, 0,
-        1, -1.5, 0,
-        
-        1, -1.5, 0,
-        1.5, -3.5, 0
-    ]);
-    bodyGeometry.setAttribute('position', new THREE.BufferAttribute(bodyPoints, 3));
-    const body = new THREE.LineSegments(
-        bodyGeometry,
-        new THREE.LineBasicMaterial({ color: 0x333333 })
-    );
-    humanGroup.add(body);
-    
-    // Add meshes to scene
+    // Position initial models
     computerGroup.position.x = -8;
     humanGroup.position.x = 8;
     
     scene.add(computerGroup);
     scene.add(humanGroup);
+    
+    // Create ambient light
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    scene.add(ambientLight);
+    
+    // Add directional light
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(0, 10, 10);
+    scene.add(directionalLight);
     
     // Animation variables
     let mergeProgress = 0;
@@ -462,9 +366,21 @@ function setup3DAnimation() {
     // Create the merged entity in advance (but don't add to scene yet)
     const mergedGroup = createMergedEntity();
     
+    // Floating particles
+    const particles = createParticles();
+    scene.add(particles);
+    
     // Animation loop
     function animate() {
         requestAnimationFrame(animate);
+        
+        // Animate particles
+        if (particles.children.length > 0) {
+            particles.children.forEach((particle, i) => {
+                particle.position.y += Math.sin(Date.now() * 0.001 + i) * 0.01;
+                particle.rotation.y += 0.01;
+            });
+        }
         
         if (container.classList.contains('fade-in') && !isAnimationComplete) {
             if (!merged && mergeProgress < 1) {
@@ -475,8 +391,12 @@ function setup3DAnimation() {
                 humanGroup.position.x = 8 - mergeProgress * 8;
                 
                 // Add subtle movement
-                computerGroup.position.y = Math.sin(mergeProgress * Math.PI * 2) * 0.2;
-                humanGroup.position.y = Math.sin(mergeProgress * Math.PI * 2 + Math.PI) * 0.2;
+                computerGroup.position.y = Math.sin(mergeProgress * Math.PI * 2) * 0.3;
+                humanGroup.position.y = Math.sin(mergeProgress * Math.PI * 2 + Math.PI) * 0.3;
+                
+                // Add subtle rotation
+                computerGroup.rotation.z = Math.sin(mergeProgress * Math.PI) * 0.1;
+                humanGroup.rotation.z = -Math.sin(mergeProgress * Math.PI) * 0.1;
                 
                 // Start rotation after halfway
                 if (mergeProgress > 0.5) {
@@ -502,8 +422,22 @@ function setup3DAnimation() {
                     // Use GSAP for a nice intro animation
                     gsap.from(mergedGroup.scale, {
                         x: 0.6, y: 0.6, z: 0.6,
-                        duration: 1,
+                        duration: 1.5,
                         ease: "elastic.out(1, 0.3)"
+                    });
+                    
+                    // Add light animation
+                    const pointLight = new THREE.PointLight(0x9277FF, 2, 10);
+                    pointLight.position.set(0, 0, 2);
+                    mergedGroup.add(pointLight);
+                    
+                    // Animate the light intensity
+                    gsap.to(pointLight, {
+                        intensity: 0.8,
+                        duration: 2,
+                        yoyo: true,
+                        repeat: -1,
+                        ease: "sine.inOut"
                     });
                     
                     // Mark animation as complete
@@ -514,9 +448,12 @@ function setup3DAnimation() {
                 mergedGroup.rotation.y += 0.007;
                 mergedGroup.rotation.x = Math.sin(Date.now() * 0.001) * 0.15;
                 
-                // Subtle breathing animation
+                // Complex breathing animation
                 const breathScale = 1 + Math.sin(Date.now() * 0.002) * 0.02;
                 mergedGroup.scale.set(breathScale, breathScale, breathScale);
+                
+                // Slight floating movement
+                mergedGroup.position.y = Math.sin(Date.now() * 0.001) * 0.2;
             }
         }
         
@@ -538,192 +475,953 @@ function setup3DAnimation() {
     animate();
 }
 
-function createMergedEntity() {
-    // Create a complex merged entity (combination of computer and human)
-    const mergedGroup = new THREE.Group();
+function createComputerModel() {
+    const group = new THREE.Group();
     
-    // Add stylized human-computer hybrid with more details
-    const hybridGeometry = new THREE.BufferGeometry();
+    // More complex monitor structure
+    const monitorFrameGeometry = new THREE.BoxGeometry(6.2, 4.2, 0.6);
+    const monitorFrameMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0x333333, 
+        wireframe: true,
+        transparent: true,
+        opacity: 0.7
+    });
+    const monitorFrame = new THREE.Mesh(monitorFrameGeometry, monitorFrameMaterial);
+    group.add(monitorFrame);
     
-    // Create much more detailed points for a human-computer hybrid
-    const hybridPoints = [
-        // Head with digital elements
-        0, 4, 0,
-        -1, 5, 0,
+    // Screen with glowing effect
+    const screenGeometry = new THREE.PlaneGeometry(5.5, 3.5);
+    const screenMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0x1A1A2E,
+        transparent: true,
+        opacity: 0.5
+    });
+    const screen = new THREE.Mesh(screenGeometry, screenMaterial);
+    screen.position.z = 0.31;
+    group.add(screen);
+    
+    // Add detailed circuit board structure inside
+    const circuitGeometry = new THREE.BufferGeometry();
+    const circuitPositions = [];
+    
+    // Create complex grid of circuits
+    for (let x = -2.5; x <= 2.5; x += 0.5) {
+        for (let y = -1.5; y <= 1.5; y += 0.5) {
+            // Only add some points for a more realistic circuit look
+            if (Math.random() > 0.4) {
+                // Add horizontal line
+                if (Math.random() > 0.5) {
+                    circuitPositions.push(x, y, 0.32);
+                    circuitPositions.push(x + 0.4 * Math.random(), y, 0.32);
+                }
+                
+                // Add vertical line
+                if (Math.random() > 0.5) {
+                    circuitPositions.push(x, y, 0.32);
+                    circuitPositions.push(x, y + 0.4 * Math.random(), 0.32);
+                }
+                
+                // Add connection nodes as small spheres
+                if (Math.random() > 0.7) {
+                    const nodeGeometry = new THREE.SphereGeometry(0.04, 8, 8);
+                    const nodeMaterial = new THREE.MeshBasicMaterial({ 
+                        color: 0x6F5CFA, 
+                        transparent: true,
+                        opacity: 0.9
+                    });
+                    const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
+                    node.position.set(x, y, 0.33);
+                    group.add(node);
+                }
+            }
+        }
+    }
+    
+    circuitGeometry.setAttribute('position', new THREE.Float32BufferAttribute(circuitPositions, 3));
+    const circuitMaterial = new THREE.LineBasicMaterial({ 
+        color: 0x6F5CFA, 
+        transparent: true,
+        opacity: 0.7
+    });
+    const circuits = new THREE.LineSegments(circuitGeometry, circuitMaterial);
+    group.add(circuits);
+    
+    // Add pulsing "processor" in center
+    const processorGeometry = new THREE.BoxGeometry(1, 1, 0.1);
+    const processorMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0x9277FF, 
+        transparent: true,
+        opacity: 0.8
+    });
+    const processor = new THREE.Mesh(processorGeometry, processorMaterial);
+    processor.position.z = 0.35;
+    group.add(processor);
+    
+    // Animate processor glow
+    gsap.to(processorMaterial, {
+        opacity: 0.4,
+        duration: 1,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+    });
+    
+    // Add connecting "data lines" from processor to different parts
+    const dataLinesGeometry = new THREE.BufferGeometry();
+    const dataLinesPositions = [];
+    
+    for (let i = 0; i < 12; i++) {
+        const angle = (i / 12) * Math.PI * 2;
+        const radius = 0.5;
         
-        0, 4, 0,
-        1, 5, 0,
+        const startX = 0;
+        const startY = 0;
         
-        0, 4, 0,
-        0, 5.5, 0,
+        const endX = Math.cos(angle) * (radius + 1 + Math.random());
+        const endY = Math.sin(angle) * (radius + 1 + Math.random());
         
-        // Digital face
-        -0.5, 4.3, 0,
-        0.5, 4.3, 0,
+        dataLinesPositions.push(startX, startY, 0.36);
+        dataLinesPositions.push(endX, endY, 0.36);
+    }
+    
+    dataLinesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(dataLinesPositions, 3));
+    const dataLinesMaterial = new THREE.LineBasicMaterial({ 
+        color: 0x9277FF, 
+        transparent: true,
+        opacity: 0.5
+    });
+    const dataLines = new THREE.LineSegments(dataLinesGeometry, dataLinesMaterial);
+    group.add(dataLines);
+    
+    // Add keyboard with keys
+    const keyboardBaseGeometry = new THREE.BoxGeometry(5, 1.5, 0.2);
+    const keyboardBaseMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0x333333,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.6
+    });
+    const keyboardBase = new THREE.Mesh(keyboardBaseGeometry, keyboardBaseMaterial);
+    keyboardBase.position.y = -3;
+    keyboardBase.position.z = 0.1;
+    group.add(keyboardBase);
+    
+    // Add individual keys
+    for (let x = -2; x <= 2; x += 0.5) {
+        for (let y = -3.5; y <= -2.5; y += 0.4) {
+            const keyGeometry = new THREE.BoxGeometry(0.3, 0.25, 0.05);
+            const keyMaterial = new THREE.MeshBasicMaterial({ 
+                color: 0x444444,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.7
+            });
+            const key = new THREE.Mesh(keyGeometry, keyMaterial);
+            key.position.set(x, y, 0.15);
+            group.add(key);
+        }
+    }
+    
+    // Create a stand that looks more detailed
+    const standGeometry = new THREE.BufferGeometry();
+    const standPositions = [
+        // Center support
+        0, -2, 0,
+        0, -3, 0,
         
-        -0.5, 3.7, 0,
-        0.5, 3.7, 0,
-        
-        // Face circuit lines
-        -0.8, 4.5, 0,
-        -0.3, 4.5, 0,
-        
-        0.8, 4.5, 0,
-        0.3, 4.5, 0,
-        
-        -0.5, 4.8, 0,
-        0.5, 4.8, 0,
-        
-        // Augmented body center
-        0, 4, 0,
-        0, 2.5, 0,
-        
-        0, 2.5, 0,
-        0, 0, 0,
-        
-        // Shoulder frame
-        -2, 2.5, 0,
-        2, 2.5, 0,
-        
-        // Left detailed arm
-        -2, 2.5, 0,
-        -3, 2, 0,
-        
-        -3, 2, 0,
-        -3.5, 1, 0,
-        
-        -3.5, 1, 0,
-        -4, 0, 0,
-        
-        // Geometric left arm details 
-        -3, 2, 0,
-        -2.7, 1.5, 0,
-        
-        -2.7, 1.5, 0,
-        -3.2, 1, 0,
-        
-        -3.2, 1, 0,
-        -3, 0.5, 0,
-        
-        // Right detailed arm
-        2, 2.5, 0,
-        3, 2, 0,
-        
-        3, 2, 0,
-        3.5, 1, 0,
-        
-        3.5, 1, 0,
-        4, 0, 0,
-        
-        // Geometric right arm details
-        3, 2, 0,
-        2.7, 1.5, 0,
-        
-        2.7, 1.5, 0,
-        3.2, 1, 0,
-        
-        3.2, 1, 0,
-        3, 0.5, 0,
-        
-        // Digital legs with details
-        0, 0, 0,
-        -1.5, -2, 0,
-        
-        -1.5, -2, 0,
-        -2, -4, 0,
-        
-        0, 0, 0,
-        1.5, -2, 0,
-        
-        1.5, -2, 0,
-        2, -4, 0,
-        
-        // Leg details - circuits
-        -1.5, -2, 0,
-        -1, -2.5, 0,
-        
-        -1, -2.5, 0,
+        // Base horizontal
         -1.5, -3, 0,
-        
-        1.5, -2, 0,
-        1, -2.5, 0,
-        
-        1, -2.5, 0,
         1.5, -3, 0,
         
-        // Torso circuit details
-        -1, 2, 0,
-        1, 2, 0,
+        // Base front edge
+        -1.5, -3, 0.2,
+        1.5, -3, 0.2,
         
-        -1.5, 1, 0,
-        1.5, 1, 0,
+        // Connect verticals
+        -1.5, -3, 0,
+        -1.5, -3, 0.2,
         
-        -1, 0, 0,
-        1, 0, 0,
+        1.5, -3, 0,
+        1.5, -3, 0.2,
         
-        // Vertical connectors
-        -1, 2, 0,
-        -1, 0, 0,
+        // Additional support beams
+        -0.5, -2, 0,
+        -0.5, -3, 0,
         
-        1, 2, 0,
-        1, 0, 0,
-        
-        // Digital aura/glow (more dense in center)
-        -0.5, 5.2, 0,
-        0.5, 5.2, 0,
-        
-        -2.2, 3, 0,
-        -2.5, 3.5, 0,
-        
-        2.2, 3, 0,
-        2.5, 3.5, 0,
-        
-        // Display panel on chest
-        -1, 1.5, 0,
-        1, 1.5, 0,
-        
-        1, 1.5, 0,
-        1, 0.5, 0,
-        
-        1, 0.5, 0,
-        -1, 0.5, 0,
-        
-        -1, 0.5, 0,
-        -1, 1.5, 0,
-        
-        // Display details
-        -0.8, 1.3, 0,
-        0.8, 1.3, 0,
-        
-        -0.8, 1.1, 0,
-        0.8, 1.1, 0,
-        
-        -0.8, 0.9, 0,
-        0.8, 0.9, 0,
-        
-        -0.8, 0.7, 0,
-        0.8, 0.7, 0
+        0.5, -2, 0,
+        0.5, -3, 0
     ];
     
-    hybridGeometry.setAttribute('position', new THREE.Float32BufferAttribute(hybridPoints, 3));
+    standGeometry.setAttribute('position', new THREE.Float32BufferAttribute(standPositions, 3));
+    const standMaterial = new THREE.LineBasicMaterial({ color: 0x333333 });
+    const stand = new THREE.LineSegments(standGeometry, standMaterial);
+    group.add(stand);
     
-    const hybrid = new THREE.LineSegments(
-        hybridGeometry,
-        new THREE.LineBasicMaterial({ 
-            color: 0x333333, 
-            linewidth: 1.5, 
-            transparent: true, 
-            opacity: 0.9 
-        })
+    return group;
+}
+
+function createHumanModel() {
+    const group = new THREE.Group();
+    
+    // Create a more detailed human figure with more organic forms
+    
+    // Head with better structure
+    const headGeometry = new THREE.SphereGeometry(1, 24, 24);
+    const headMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0x444444, 
+        wireframe: true,
+        transparent: true,
+        opacity: 0.7
+    });
+    const head = new THREE.Mesh(headGeometry, headMaterial);
+    head.position.y = 4;
+    group.add(head);
+    
+    // Detailed brain structure
+    const brainGroup = new THREE.Group();
+    brainGroup.position.y = 4; // Position at head center
+    
+    // Main brain hemispheres
+    const leftHemisphereGeometry = new THREE.SphereGeometry(0.7, 16, 16, 0, Math.PI);
+    const rightHemisphereGeometry = new THREE.SphereGeometry(0.7, 16, 16, Math.PI, Math.PI);
+    
+    const brainMaterial = new THREE.MeshBasicMaterial({
+        color: 0xD94F4F,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.4
+    });
+    
+    const leftHemisphere = new THREE.Mesh(leftHemisphereGeometry, brainMaterial);
+    leftHemisphere.rotation.y = Math.PI / 2;
+    leftHemisphere.position.x = -0.1;
+    
+    const rightHemisphere = new THREE.Mesh(rightHemisphereGeometry, brainMaterial);
+    rightHemisphere.rotation.y = -Math.PI / 2;
+    rightHemisphere.position.x = 0.1;
+    
+    brainGroup.add(leftHemisphere);
+    brainGroup.add(rightHemisphere);
+    
+    // Neural connections inside brain
+    const neuralGeometry = new THREE.BufferGeometry();
+    const neuralPositions = [];
+    
+    // Create more complex neural structure
+    const brainPoints = [];
+    for (let i = 0; i < 20; i++) {
+        // Random points within brain volume
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.random() * Math.PI;
+        const radius = 0.6 * Math.random();
+        
+        const x = radius * Math.sin(phi) * Math.cos(theta);
+        const y = radius * Math.sin(phi) * Math.sin(theta);
+        const z = radius * Math.cos(phi);
+        
+        brainPoints.push({ x, y, z });
+    }
+    
+    // Connect points to create neural network
+    for (let i = 0; i < brainPoints.length; i++) {
+        const p1 = brainPoints[i];
+        
+        // Connect each point to several others
+        for (let j = 0; j < 3; j++) {
+            const rndIdx = Math.floor(Math.random() * brainPoints.length);
+            const p2 = brainPoints[rndIdx];
+            
+            neuralPositions.push(p1.x, p1.y, p1.z);
+            neuralPositions.push(p2.x, p2.y, p2.z);
+        }
+    }
+    
+    neuralGeometry.setAttribute('position', new THREE.Float32BufferAttribute(neuralPositions, 3));
+    const neuralMaterial = new THREE.LineBasicMaterial({
+        color: 0xFF8D78,
+        transparent: true,
+        opacity: 0.6
+    });
+    
+    const neuralNetwork = new THREE.LineSegments(neuralGeometry, neuralMaterial);
+    brainGroup.add(neuralNetwork);
+    
+    // Add neural pulse effect with small glowing spheres
+    for (let i = 0; i < 10; i++) {
+        const idx = Math.floor(Math.random() * brainPoints.length);
+        const point = brainPoints[idx];
+        
+        const pulseGeometry = new THREE.SphereGeometry(0.03, 8, 8);
+        const pulseMaterial = new THREE.MeshBasicMaterial({
+            color: 0xFF8D78,
+            transparent: true,
+            opacity: 0.8
+        });
+        
+        const pulse = new THREE.Mesh(pulseGeometry, pulseMaterial);
+        pulse.position.set(point.x, point.y, point.z);
+        
+        // Animate each pulse
+        gsap.to(pulseMaterial, {
+            opacity: 0.2,
+            duration: 0.8 + Math.random(),
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
+        });
+        
+        brainGroup.add(pulse);
+    }
+    
+    group.add(brainGroup);
+    
+    // Eyes with more detail
+    const eyeGeometry = new THREE.SphereGeometry(0.2, 16, 16);
+    const eyeOuterMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.7
+    });
+    
+    const leftEye = new THREE.Mesh(eyeGeometry, eyeOuterMaterial);
+    leftEye.position.set(-0.35, 4.1, 0.85);
+    
+    const rightEye = new THREE.Mesh(eyeGeometry, eyeOuterMaterial);
+    rightEye.position.set(0.35, 4.1, 0.85);
+    
+    // Add pupils
+    const pupilGeometry = new THREE.SphereGeometry(0.08, 8, 8);
+    const pupilMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+    
+    const leftPupil = new THREE.Mesh(pupilGeometry, pupilMaterial);
+    leftPupil.position.set(0, 0, 0.12);
+    leftEye.add(leftPupil);
+    
+    const rightPupil = new THREE.Mesh(pupilGeometry, pupilMaterial);
+    rightPupil.position.set(0, 0, 0.12);
+    rightEye.add(rightPupil);
+    
+    group.add(leftEye);
+    group.add(rightEye);
+    
+    // More detailed body with musculature and better proportions
+    const torsoGeometry = new THREE.BufferGeometry();
+    const torsoPositions = [];
+    
+    // Neck
+    torsoPositions.push(0, 3, 0);
+    torsoPositions.push(-0.2, 2.7, 0.1);
+    
+    torsoPositions.push(0, 3, 0);
+    torsoPositions.push(0.2, 2.7, 0.1);
+    
+    torsoPositions.push(-0.2, 2.7, 0.1);
+    torsoPositions.push(0, 2.5, 0.15);
+    
+    torsoPositions.push(0.2, 2.7, 0.1);
+    torsoPositions.push(0, 2.5, 0.15);
+    
+    // Shoulders with more articulation
+    torsoPositions.push(0, 2.5, 0.15);
+    torsoPositions.push(-0.5, 2.3, 0.1);
+    
+    torsoPositions.push(0, 2.5, 0.15);
+    torsoPositions.push(0.5, 2.3, 0.1);
+    
+    torsoPositions.push(-0.5, 2.3, 0.1);
+    torsoPositions.push(-1.5, 2.2, 0);
+    
+    torsoPositions.push(0.5, 2.3, 0.1);
+    torsoPositions.push(1.5, 2.2, 0);
+    
+    // Detailed chest/torso with muscle definition
+    // Pectoral outlines
+    torsoPositions.push(-0.5, 2.3, 0.1);
+    torsoPositions.push(-0.8, 1.8, 0.2);
+    
+    torsoPositions.push(0.5, 2.3, 0.1);
+    torsoPositions.push(0.8, 1.8, 0.2);
+    
+    torsoPositions.push(-0.8, 1.8, 0.2);
+    torsoPositions.push(-0.4, 1.2, 0.25);
+    
+    torsoPositions.push(0.8, 1.8, 0.2);
+    torsoPositions.push(0.4, 1.2, 0.25);
+    
+    torsoPositions.push(-0.4, 1.2, 0.25);
+    torsoPositions.push(0, 1, 0.2);
+    
+    torsoPositions.push(0.4, 1.2, 0.25);
+    torsoPositions.push(0, 1, 0.2);
+    
+    // Central line
+    torsoPositions.push(0, 2.5, 0.15);
+    torsoPositions.push(0, 1, 0.2);
+    
+    torsoPositions.push(0, 1, 0.2);
+    torsoPositions.push(0, -0.5, 0);
+    
+    // Abdominal definition
+    torsoPositions.push(-0.4, 1, 0.2);
+    torsoPositions.push(-0.4, 0.5, 0.15);
+    
+    torsoPositions.push(0.4, 1, 0.2);
+    torsoPositions.push(0.4, 0.5, 0.15);
+    
+    torsoPositions.push(-0.4, 0.5, 0.15);
+    torsoPositions.push(-0.3, 0, 0.1);
+    
+    torsoPositions.push(0.4, 0.5, 0.15);
+    torsoPositions.push(0.3, 0, 0.1);
+    
+    torsoPositions.push(-0.3, 0, 0.1);
+    torsoPositions.push(0, -0.5, 0);
+    
+    torsoPositions.push(0.3, 0, 0.1);
+    torsoPositions.push(0, -0.5, 0);
+    
+    // Hip structure
+    torsoPositions.push(0, -0.5, 0);
+    torsoPositions.push(-1, -1, 0);
+    
+    torsoPositions.push(0, -0.5, 0);
+    torsoPositions.push(1, -1, 0);
+    
+    torsoPositions.push(-1, -1, 0);
+    torsoPositions.push(1, -1, 0);
+    
+    // Arms with more detailed muscles and joints
+    // Left arm
+    torsoPositions.push(-1.5, 2.2, 0);
+    torsoPositions.push(-2, 1.7, 0);
+    
+    torsoPositions.push(-2, 1.7, 0);
+    torsoPositions.push(-2.2, 1.2, 0);
+    
+    torsoPositions.push(-2.2, 1.2, 0);
+    torsoPositions.push(-2.3, 0.7, 0);
+    
+    torsoPositions.push(-2.3, 0.7, 0);
+    torsoPositions.push(-2.7, 0, 0);
+    
+    torsoPositions.push(-2.7, 0, 0);
+    torsoPositions.push(-3, -0.5, 0);
+    
+    // Left arm muscle definition
+    torsoPositions.push(-1.5, 2.2, 0);
+    torsoPositions.push(-1.8, 1.5, -0.1);
+    
+    torsoPositions.push(-1.8, 1.5, -0.1);
+    torsoPositions.push(-2.2, 1.2, 0);
+    
+    torsoPositions.push(-2.3, 0.7, 0);
+    torsoPositions.push(-2.5, 0.5, -0.1);
+    
+    torsoPositions.push(-2.5, 0.5, -0.1);
+    torsoPositions.push(-2.7, 0, 0);
+    
+    // Right arm with similar detail
+    torsoPositions.push(1.5, 2.2, 0);
+    torsoPositions.push(2, 1.7, 0);
+    
+    torsoPositions.push(2, 1.7, 0);
+    torsoPositions.push(2.2, 1.2, 0);
+    
+    torsoPositions.push(2.2, 1.2, 0);
+    torsoPositions.push(2.3, 0.7, 0);
+    
+    torsoPositions.push(2.3, 0.7, 0);
+    torsoPositions.push(2.7, 0, 0);
+    
+    torsoPositions.push(2.7, 0, 0);
+    torsoPositions.push(3, -0.5, 0);
+    
+    // Right arm muscle definition
+    torsoPositions.push(1.5, 2.2, 0);
+    torsoPositions.push(1.8, 1.5, -0.1);
+    
+    torsoPositions.push(1.8, 1.5, -0.1);
+    torsoPositions.push(2.2, 1.2, 0);
+    
+    torsoPositions.push(2.3, 0.7, 0);
+    torsoPositions.push(2.5, 0.5, -0.1);
+    
+    torsoPositions.push(2.5, 0.5, -0.1);
+    torsoPositions.push(2.7, 0, 0);
+    
+    // Legs with more anatomical detail
+    // Left leg
+    torsoPositions.push(-1, -1, 0);
+    torsoPositions.push(-1.1, -1.5, 0);
+    
+    torsoPositions.push(-1.1, -1.5, 0);
+    torsoPositions.push(-1.2, -2, 0);
+    
+    torsoPositions.push(-1.2, -2, 0);
+    torsoPositions.push(-1.1, -2.5, 0);
+    
+    torsoPositions.push(-1.1, -2.5, 0);
+    torsoPositions.push(-1, -3, 0);
+    
+    torsoPositions.push(-1, -3, 0);
+    torsoPositions.push(-0.9, -3.5, 0);
+    
+    torsoPositions.push(-0.9, -3.5, 0);
+    torsoPositions.push(-0.8, -4, 0);
+    
+    // Left leg muscle definition
+    torsoPositions.push(-1, -1, 0);
+    torsoPositions.push(-0.8, -1.3, 0.1);
+    
+    torsoPositions.push(-0.8, -1.3, 0.1);
+    torsoPositions.push(-1.1, -1.5, 0);
+    
+    torsoPositions.push(-1.1, -2.5, 0);
+    torsoPositions.push(-0.9, -2.3, 0.1);
+    
+    torsoPositions.push(-0.9, -2.3, 0.1);
+    torsoPositions.push(-1, -2, 0);
+    
+    // Right leg with similar detail
+    torsoPositions.push(1, -1, 0);
+    torsoPositions.push(1.1, -1.5, 0);
+    
+    torsoPositions.push(1.1, -1.5, 0);
+    torsoPositions.push(1.2, -2, 0);
+    
+    torsoPositions.push(1.2, -2, 0);
+    torsoPositions.push(1.1, -2.5, 0);
+    
+    torsoPositions.push(1.1, -2.5, 0);
+    torsoPositions.push(1, -3, 0);
+    
+    torsoPositions.push(1, -3, 0);
+    torsoPositions.push(0.9, -3.5, 0);
+    
+    torsoPositions.push(0.9, -3.5, 0);
+    torsoPositions.push(0.8, -4, 0);
+    
+    // Right leg muscle definition
+    torsoPositions.push(1, -1, 0);
+    torsoPositions.push(0.8, -1.3, 0.1);
+    
+    torsoPositions.push(0.8, -1.3, 0.1);
+    torsoPositions.push(1.1, -1.5, 0);
+    
+    torsoPositions.push(1.1, -2.5, 0);
+    torsoPositions.push(0.9, -2.3, 0.1);
+    
+    torsoPositions.push(0.9, -2.3, 0.1);
+    torsoPositions.push(1, -2, 0);
+    
+    torsoGeometry.setAttribute('position', new THREE.Float32BufferAttribute(torsoPositions, 3));
+    const torsoMaterial = new THREE.LineBasicMaterial({ 
+        color: 0x444444,
+        transparent: true,
+        opacity: 0.8
+    });
+    const torso = new THREE.LineSegments(torsoGeometry, torsoMaterial);
+    group.add(torso);
+    
+    // Add neural system flowing through body
+    const neuralSystemGeometry = new THREE.BufferGeometry();
+    const neuralSystemPositions = [];
+    
+    // Create more complex neural pathways flowing down from brain to body
+    const spinalPoints = [];
+    
+    // Main spinal cord
+    for (let y = 3.5; y >= -3.5; y -= 0.2) {
+        const x = Math.sin(y * 2) * 0.05;
+        spinalPoints.push({ x, y, z: 0.05 });
+    }
+    
+    // Connect spinal points
+    for (let i = 0; i < spinalPoints.length - 1; i++) {
+        const p1 = spinalPoints[i];
+        const p2 = spinalPoints[i + 1];
+        
+        neuralSystemPositions.push(p1.x, p1.y, p1.z);
+        neuralSystemPositions.push(p2.x, p2.y, p2.z);
+        
+        // Add branching nerves at intervals
+        if (i % 3 === 0) {
+            // Left branch
+            neuralSystemPositions.push(p1.x, p1.y, p1.z);
+            neuralSystemPositions.push(p1.x - 0.5 - Math.random() * 0.5, p1.y, p1.z - 0.05);
+            
+            // Right branch
+            neuralSystemPositions.push(p1.x, p1.y, p1.z);
+            neuralSystemPositions.push(p1.x + 0.5 + Math.random() * 0.5, p1.y, p1.z - 0.05);
+        }
+    }
+    
+    neuralSystemGeometry.setAttribute('position', new THREE.Float32BufferAttribute(neuralSystemPositions, 3));
+    const neuralSystemMaterial = new THREE.LineBasicMaterial({ 
+        color: 0xFF8D78,
+        transparent: true,
+        opacity: 0.4
+    });
+    const neuralSystem = new THREE.LineSegments(neuralSystemGeometry, neuralSystemMaterial);
+    group.add(neuralSystem);
+    
+    // Create gentle aura around figure
+    const auraGeometry = new THREE.SphereGeometry(4.5, 24, 24);
+    const auraMaterial = new THREE.MeshBasicMaterial({
+        color: 0xFF8D78,
+        transparent: true,
+        opacity: 0.03,
+        side: THREE.BackSide
+    });
+    const aura = new THREE.Mesh(auraGeometry, auraMaterial);
+    aura.position.y = 0;
+    
+    // Animate aura subtly
+    gsap.to(aura.scale, {
+        x: 1.05,
+        y: 1.05,
+        z: 1.05,
+        duration: 2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+    });
+    
+    group.add(aura);
+    
+    return group;
+}
+
+function createMergedEntity() {
+    const group = new THREE.Group();
+    
+    // Core structure - a blend of human and computer
+    const hybridGeometry = new THREE.BufferGeometry();
+    
+    // Complex points for a human-computer hybrid shape
+    // Define the structure in layers for better organization
+    const points = [];
+    
+    // Head/monitor hybrid
+    const headPoints = [
+        // Top frame
+        -1.5, 5, 0,
+        1.5, 5, 0,
+        
+        // Side frames
+        -1.5, 5, 0,
+        -1.5, 3.5, 0,
+        
+        1.5, 5, 0,
+        1.5, 3.5, 0,
+        
+        // Bottom frame
+        -1.5, 3.5, 0,
+        1.5, 3.5, 0,
+        
+        // Display features (eyes)
+        -0.7, 4.5, 0.1,
+        -0.3, 4.5, 0.1,
+        
+        0.7, 4.5, 0.1,
+        0.3, 4.5, 0.1,
+        
+        // Circuit patterns in head
+        -1.2, 4.8, 0.1,
+        -0.8, 4.8, 0.1,
+        
+        0.8, 4.8, 0.1,
+        1.2, 4.8, 0.1,
+        
+        -1, 4.3, 0.1,
+        -0.2, 4.3, 0.1,
+        
+        0.2, 4.3, 0.1,
+        1, 4.3, 0.1,
+        
+        -1.2, 3.8, 0.1,
+        -0.4, 3.8, 0.1,
+        
+        0.4, 3.8, 0.1,
+        1.2, 3.8, 0.1,
+        
+        // "Neural" connections from head
+        0, 3.5, 0,
+        0, 3, 0
+    ];
+    
+    // Torso/chassis hybrid
+    const torsoPoints = [
+        // Neck/connection
+        0, 3, 0,
+        0, 2, 0,
+        
+        // Shoulder frame
+        -2, 2, 0,
+        2, 2, 0,
+        
+        // Main body structure - stylized computer case/human chest
+        -2, 2, 0,
+        -2, -1, 0,
+        
+        2, 2, 0,
+        2, -1, 0,
+        
+        -2, -1, 0,
+        2, -1, 0,
+        
+        // Internal structure lines - motherboard/organs
+        -1.5, 1.5, 0.1,
+        1.5, 1.5, 0.1,
+        
+        -1.5, 1, 0.1,
+        1.5, 1, 0.1,
+        
+        -1.5, 0.5, 0.1,
+        1.5, 0.5, 0.1,
+        
+        -1.5, 0, 0.1,
+        1.5, 0, 0.1,
+        
+        -1.5, -0.5, 0.1,
+        1.5, -0.5, 0.1,
+        
+        // Vertical data buses/spine
+        -1, 2, 0.1,
+        -1, -1, 0.1,
+        
+        0, 2, 0.1,
+        0, -1, 0.1,
+        
+        1, 2, 0.1,
+        1, -1, 0.1,
+        
+        // Central processor/heart
+        -0.7, 1, 0.2,
+        0.7, 1, 0.2,
+        
+        0.7, 1, 0.2,
+        0.7, 0, 0.2,
+        
+        0.7, 0, 0.2,
+        -0.7, 0, 0.2,
+        
+        -0.7, 0, 0.2,
+        -0.7, 1, 0.2
+    ];
+    
+    // Arms/peripherals
+    const armPoints = [
+        // Left arm - more mechanical in nature
+        -2, 2, 0,
+        -2.5, 1.5, 0,
+        
+        -2.5, 1.5, 0,
+        -3, 0.5, 0,
+        
+        -3, 0.5, 0,
+        -3.5, -0.5, 0,
+        
+        // Left arm details - circuit-like
+        -2.5, 1.5, 0.1,
+        -2.2, 1.2, 0.1,
+        
+        -2.2, 1.2, 0.1,
+        -2.7, 0.8, 0.1,
+        
+        -2.7, 0.8, 0.1,
+        -3, 0.5, 0.1,
+        
+        // Right arm - more organic in nature
+        2, 2, 0,
+        2.3, 1.3, 0,
+        
+        2.3, 1.3, 0,
+        3, 0.7, 0,
+        
+        3, 0.7, 0,
+        3.5, -0.3, 0,
+        
+        // Right arm details - neural-like
+        2.3, 1.3, 0.1,
+        2.5, 1, 0.1,
+        
+        2.5, 1, 0.1,
+        2.8, 0.9, 0.1,
+        
+        2.8, 0.9, 0.1,
+        3, 0.7, 0.1
+    ];
+    
+    // Legs/supports
+    const legPoints = [
+        // Left leg - robotic/structured
+        -1.5, -1, 0,
+        -1.5, -2, 0,
+        
+        -1.5, -2, 0,
+        -1.5, -3, 0,
+        
+        -1.5, -3, 0,
+        -1, -4, 0,
+        
+        // Left leg segments - mechanical joins
+        -1.5, -2, 0.1,
+        -1.2, -2, 0.1,
+        
+        -1.5, -3, 0.1,
+        -1.3, -3, 0.1,
+        
+        // Right leg - more flowing/organic
+        1.5, -1, 0,
+        1.3, -2, 0,
+        
+        1.3, -2, 0,
+        1.5, -3, 0,
+        
+        1.5, -3, 0,
+        1, -4, 0,
+        
+        // Right leg details - flowing curves
+        1.3, -2, 0.1,
+        1.4, -2.5, 0.1,
+        
+        1.4, -2.5, 0.1,
+        1.5, -3, 0.1
+    ];
+    
+    // Data/neural connections between components
+    const connectionPoints = [
+        // Head to torso connections
+        -1, 3.5, 0.15,
+        -1.5, 3, 0.15,
+        
+        1, 3.5, 0.15,
+        1.5, 3, 0.15,
+        
+        // Processor to arms
+        0, 0.5, 0.2,
+        -2, 1, 0.2,
+        
+        0, 0.5, 0.2,
+        2, 1, 0.2,
+        
+        // Processor to legs
+        0, 0, 0.2,
+        -1, -1.5, 0.2,
+        
+        0, 0, 0.2,
+        1, -1.5, 0.2,
+        
+        // Cross-connections
+        -1, 1.5, 0.15,
+        1, 0, 0.15,
+        
+        1, 1.5, 0.15,
+        -1, 0, 0.15
+    ];
+    
+    // Detailed circuitry overlays
+    const circuitryPoints = [];
+    for (let i = 0; i < 35; i++) {
+        const x1 = (Math.random() - 0.5) * 3;
+        const y1 = (Math.random() - 0.5) * 8;
+        const z1 = 0.3;
+        
+        const length = 0.3 + Math.random() * 0.7;
+        const angle = Math.random() * Math.PI * 2;
+        
+        const x2 = x1 + Math.cos(angle) * length;
+        const y2 = y1 + Math.sin(angle) * length;
+        const z2 = z1;
+        
+        circuitryPoints.push(x1, y1, z1, x2, y2, z2);
+    }
+    
+    // Combine all points
+    points.push(
+        ...headPoints,
+        ...torsoPoints,
+        ...armPoints,
+        ...legPoints,
+        ...connectionPoints
     );
     
-    // Add a subtle glow effect using a point light
-    const light = new THREE.PointLight(0x6F5CFA, 0.5, 10);
-    light.position.set(0, 0, 3);
-    mergedGroup.add(light);
+    // Create the main hybrid body
+    hybridGeometry.setAttribute('position', new THREE.Float32BufferAttribute(points, 3));
+    const hybridMaterial = new THREE.LineBasicMaterial({ 
+        color: 0x333333, 
+        linewidth: 1.5
+    });
+    const hybrid = new THREE.LineSegments(hybridGeometry, hybridMaterial);
+    group.add(hybrid);
     
-    mergedGroup.add(hybrid);
-    return mergedGroup;
+    // Add circuitry overlay
+    const circuitryGeometry = new THREE.BufferGeometry();
+    circuitryGeometry.setAttribute('position', new THREE.Float32BufferAttribute(circuitryPoints, 3));
+    const circuitryMaterial = new THREE.LineBasicMaterial({ 
+        color: 0x6F5CFA, 
+        transparent: true,
+        opacity: 0.7 
+    });
+    const circuitry = new THREE.LineSegments(circuitryGeometry, circuitryMaterial);
+    group.add(circuitry);
+    
+    // Create a subtle glow effect
+    const glowGeometry = new THREE.SphereGeometry(5, 16, 16);
+    const glowMaterial = new THREE.MeshBasicMaterial({
+        color: 0x6F5CFA,
+        transparent: true,
+        opacity: 0.05
+    });
+    const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+    glow.scale.set(1, 1.5, 0.5); // Flatten into an oval
+    group.add(glow);
+    
+    // Add animation details with GSAP
+    gsap.to(circuitry.material, {
+        opacity: 0.4,
+        duration: 2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+    });
+    
+    return group;
+}
+
+function createParticles() {
+    const group = new THREE.Group();
+    
+    // Create floating particles that will surround the models
+    const colors = [0xE6C068, 0x9277FF, 0x67D4F8, 0xFF8D78, 0xD94F4F];
+    
+    for (let i = 0; i < 50; i++) {
+        const particle = new THREE.Mesh(
+            new THREE.CircleGeometry(0.05 + Math.random() * 0.1, 8),
+            new THREE.MeshBasicMaterial({
+                color: colors[Math.floor(Math.random() * colors.length)],
+                transparent: true,
+                opacity: 0.3 + Math.random() * 0.3
+            })
+        );
+        
+        // Position randomly in a sphere around origin
+        const radius = 5 + Math.random() * 5;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.random() * Math.PI;
+        
+        particle.position.x = radius * Math.sin(phi) * Math.cos(theta);
+        particle.position.y = radius * Math.sin(phi) * Math.sin(theta);
+        particle.position.z = radius * Math.cos(phi);
+        
+        // Face the camera
+        particle.rotation.x = -Math.PI / 2;
+        
+        group.add(particle);
+    }
+    
+    return group;
 }
 
 // Smooth scrolling for anchor links

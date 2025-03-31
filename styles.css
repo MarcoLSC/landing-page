@@ -134,36 +134,38 @@ a:hover {
     right: 1rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.8rem;
-    background-color: rgba(255, 255, 255, 0.9);
-    border: 1px solid var(--border-light);
-    border-radius: 4px;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
     color: var(--accent);
-    font-family: 'General Sans', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 500;
     cursor: pointer;
     transition: all 0.2s ease;
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(10px) rotate(0deg);
     box-shadow: var(--shadow-sm);
 }
 
 .reset-button.visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) rotate(0deg);
 }
 
 .reset-button:hover {
     background-color: rgba(255, 255, 255, 1);
     box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
+    transform: translateY(-1px) rotate(-10deg);
 }
 
 .reset-button svg {
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
+}
+
+.reset-button span {
+    display: none;
 }
 
 /* Header & Navigation */
@@ -364,42 +366,55 @@ nav ul li a:hover {
     border-radius: 0; /* Square edges */
     border: 1px solid var(--border-light);
     overflow: hidden;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     background-color: white;
     box-shadow: var(--shadow-card);
     position: relative;
     cursor: pointer;
+    z-index: 1;
 }
 
 /* Individual card theme colors and hover effects */
 .initiative-card[data-color="golden"] {
     --theme-color: var(--golden);
+    --theme-shadow: rgba(230, 192, 104, 0.3);
 }
 
 .initiative-card[data-color="purple"] {
     --theme-color: var(--purple);
+    --theme-shadow: rgba(146, 119, 255, 0.3);
 }
 
 .initiative-card[data-color="lightblue"] {
     --theme-color: var(--lightblue);
+    --theme-shadow: rgba(103, 212, 248, 0.3);
 }
 
 .initiative-card[data-color="salmon"] {
     --theme-color: var(--salmon);
+    --theme-shadow: rgba(255, 141, 120, 0.3);
 }
 
 .initiative-card[data-color="red"] {
     --theme-color: var(--red);
+    --theme-shadow: rgba(217, 79, 79, 0.3);
 }
 
 .initiative-card[data-color="black"] {
     --theme-color: var(--black);
+    --theme-shadow: rgba(26, 26, 31, 0.3);
 }
 
 .initiative-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-lg);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 15px 45px var(--theme-shadow), 0 5px 25px rgba(0, 0, 0, 0.1);
     border-color: var(--theme-color);
+    z-index: 2;
+}
+
+.initiative-card:hover::after {
+    opacity: 1;
+    transform: scale(1);
 }
 
 .initiative-card:hover .initiative-icon svg path,
@@ -540,12 +555,13 @@ footer {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
     align-items: center;
     justify-content: center;
     z-index: 1000;
     opacity: 0;
     transition: opacity 0.3s ease;
+    backdrop-filter: blur(5px);
 }
 
 .modal.active {
@@ -562,11 +578,137 @@ footer {
     position: relative;
     transform: scale(0.9);
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 1px solid var(--border-light);
+    border: 2px solid var(--theme-color, var(--accent));
+    overflow: hidden;
+}
+
+.modal-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: var(--theme-color, var(--accent));
+}
+
+.modal-content::after {
+    content: '';
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, transparent 49%, var(--theme-color, var(--accent)) 50%, transparent 51%);
+    opacity: 0.2;
+    z-index: -1;
 }
 
 .modal.active .modal-content {
     transform: scale(1);
+}
+
+/* New retro elements for modal */
+.retro-scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 1px,
+        rgba(0, 0, 0, 0.03) 1px,
+        rgba(0, 0, 0, 0.03) 2px
+    );
+    pointer-events: none;
+    opacity: 0.3;
+    z-index: 1;
+}
+
+.retro-grid {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 150px;
+    height: 150px;
+    background-image: 
+        linear-gradient(to right, var(--theme-color, var(--accent)) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--theme-color, var(--accent)) 1px, transparent 1px);
+    background-size: 15px 15px;
+    opacity: 0.1;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.retro-pixel-corner {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+    pointer-events: none;
+}
+
+.retro-pixel-corner::before,
+.retro-pixel-corner::after {
+    content: '';
+    position: absolute;
+    background-color: var(--theme-color, var(--accent));
+}
+
+.retro-pixel-corner::before {
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 2px;
+}
+
+.retro-pixel-corner::after {
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 10px;
+}
+
+.retro-blip {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background-color: var(--theme-color, var(--accent));
+    border-radius: 50%;
+    animation: blip 2s infinite;
+    opacity: 0.6;
+}
+
+.blip-1 {
+    top: 40px;
+    right: 30px;
+    animation-delay: 0s;
+}
+
+.blip-2 {
+    bottom: 30px;
+    left: 40px;
+    animation-delay: 0.7s;
+}
+
+.blip-3 {
+    top: 50%;
+    right: 20px;
+    animation-delay: 1.3s;
+}
+
+@keyframes blip {
+    0%, 100% { 
+        transform: scale(1); 
+        opacity: 0.6;
+    }
+    50% { 
+        transform: scale(1.5); 
+        opacity: 0.9;
+    }
 }
 
 .close-btn {
@@ -577,6 +719,7 @@ footer {
     color: var(--text-tertiary);
     cursor: pointer;
     transition: color 0.2s ease, transform 0.2s ease;
+    z-index: 2;
 }
 
 .close-btn:hover {
@@ -585,7 +728,20 @@ footer {
 }
 
 .modal h2 {
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+.modal h2::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--theme-color, var(--accent));
+    opacity: 0.5;
 }
 
 .modal p {
