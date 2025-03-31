@@ -115,7 +115,7 @@ function setupTypingAnimation() {
     codeElement.innerHTML = '';
     
     let i = 0;
-    const speed = 15; // Even faster typing speed
+    const speed = 15; // Fast typing speed
     
     function typeWriter() {
         if (i < codeSnippet.length) {
@@ -134,13 +134,12 @@ function setupTypingAnimation() {
             i++;
             
             // Random typing speed variation for more realistic effect
-            const randomSpeed = speed + Math.random() * 10; // Reduced randomness for faster typing
+            const randomSpeed = speed + Math.random() * 10;
             setTimeout(typeWriter, randomSpeed);
         } else {
-            // When typing is complete, transition to 3D animation after a short pause
+            // When typing is complete, transition to concept visualization
             setTimeout(() => {
-                // Start transitioning characters to prepare for 3D
-                transformCodeToAnimation();
+                transformCodeToIllustration();
             }, 200);
         }
     }
@@ -149,47 +148,15 @@ function setupTypingAnimation() {
     setTimeout(typeWriter, 200);
 }
 
-function transformCodeToAnimation() {
+function transformCodeToIllustration() {
     const codeCharacters = document.querySelectorAll('.code-character');
     const codeContainer = document.getElementById('typing-code');
     const animationContainer = document.getElementById('animation-container');
     
-    // More varied animations for characters to transform in different ways
-    const animations = [
-        { transform: 'translateY(-40px) rotate(45deg) scale(0)', opacity: 0 },
-        { transform: 'translateY(40px) rotate(-45deg) scale(0)', opacity: 0 },
-        { transform: 'translateX(-40px) scale(0)', opacity: 0 },
-        { transform: 'translateX(40px) scale(0)', opacity: 0 },
-        { transform: 'translateY(-30px) translateX(-30px) rotate(90deg) scale(0)', opacity: 0 },
-        { transform: 'translateY(30px) translateX(30px) rotate(-90deg) scale(0)', opacity: 0 },
-        { transform: 'translateY(-20px) translateX(20px) rotate(180deg) scale(0)', opacity: 0 },
-        { transform: 'translateY(20px) translateX(-20px) rotate(-180deg) scale(0)', opacity: 0 }
-    ];
-    
-    const colors = ['#E6C068', '#9277FF', '#67D4F8', '#FF8D78', '#D94F4F'];
-    
-    // Apply random transformations to each character with GSAP for smoother animations
-    codeCharacters.forEach((char, index) => {
-        const animation = animations[Math.floor(Math.random() * animations.length)];
-        const color = colors[Math.floor(Math.random() * colors.length)];
-        
-        // Set initial bright color
-        gsap.set(char, { color: color });
-        
-        // Create staggered, more impressive animation
-        gsap.to(char, {
-            ...animation,
-            duration: 0.8,
-            delay: index * 0.02,
-            ease: "power2.out"
-        });
-    });
-    
-    // After characters animate out, transition containers
+    // Fade out code with a simple opacity transition
     gsap.to(codeContainer, {
         opacity: 0,
-        duration: 0.5,
-        delay: codeCharacters.length * 0.02 + 0.2,
+        duration: 1,
         onComplete: () => {
             codeContainer.classList.add('fade-out');
             animationContainer.classList.add('fade-in');
@@ -197,7 +164,9 @@ function transformCodeToAnimation() {
             // Show reset button after animation completes
             setTimeout(() => {
                 document.getElementById('reset-animation').classList.add('visible');
-            }, 1500);
+                // Also show scroll hint when the animation completes
+                document.getElementById('scroll-hint').classList.add('visible');
+            }, 1000);
         }
     });
 }
@@ -210,11 +179,14 @@ function setupResetButton() {
         document.getElementById('animation-container').classList.remove('fade-in');
         resetButton.classList.remove('visible');
         
+        // Hide scroll hint when resetting
+        document.getElementById('scroll-hint').classList.remove('visible');
+        
         // Reset code container
         const codeContainer = document.getElementById('typing-code');
         codeContainer.classList.remove('fade-out');
         
-        // Clear 3D scene and restart
+        // Restart animation
         restartAnimation();
         
         // Restart typing animation
@@ -225,20 +197,334 @@ function setupResetButton() {
 }
 
 function restartAnimation() {
-    // The 3D animation will be restarted by removing and recreating the scene
-    const container = document.getElementById('animation-container');
-    
-    // Remove existing canvas
-    const existingCanvas = container.querySelector('canvas');
-    if (existingCanvas) {
-        container.removeChild(existingCanvas);
-    }
-    
     // Reset animation state
     isAnimationComplete = false;
     
+    // Clear and reinitialize the animation container
+    const container = document.getElementById('animation-container');
+    
+    // Remove existing canvas or animation elements
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
+    
     // Setup new animation
-    setup3DAnimation();
+    setupConceptAnimation();
+}
+
+// Global variable to track animation state
+let isAnimationComplete = false;
+
+function setup3DAnimation() {
+    // This function is now replaced by setupConceptAnimation
+    setupConceptAnimation();
+}
+
+function setupConceptAnimation() {
+    const container = document.getElementById('animation-container');
+    
+    // Create the concept visualization container
+    const conceptCanvas = document.createElement('canvas');
+    conceptCanvas.id = 'concept-canvas';
+    conceptCanvas.width = container.clientWidth;
+    conceptCanvas.height = container.clientHeight;
+    container.appendChild(conceptCanvas);
+    
+    // Create scroll hint if it doesn't exist
+    if (!document.getElementById('scroll-hint')) {
+        const scrollHint = document.createElement('div');
+        scrollHint.id = 'scroll-hint';
+        scrollHint.innerHTML = '<div class="arrow"></div><div class="pulse"></div><span>Discover Our Initiatives</span>';
+        document.body.appendChild(scrollHint);
+    }
+    
+    // Initialize the canvas and start animation
+    const ctx = conceptCanvas.getContext('2d');
+    
+    // Create a collection of nodes (concepts) and connections (evolution paths)
+    const nodes = [];
+    const connections = [];
+    const nodeCount = 60;
+    
+    // Colors
+    const humanColors = ['#FF8D78', '#D94F4F', '#FF6347'];
+    const aiColors = ['#67D4F8', '#9277FF', '#6F5CFA'];
+    const evolutionColors = ['#E6C068', '#FFD700', '#FFA500'];
+    
+    // Create nodes
+    for (let i = 0; i < nodeCount; i++) {
+        const isHuman = Math.random() > 0.5;
+        nodes.push({
+            x: Math.random() * conceptCanvas.width,
+            y: Math.random() * conceptCanvas.height,
+            radius: Math.random() * 5 + 3,
+            type: isHuman ? 'human' : 'ai',
+            color: isHuman ? 
+                humanColors[Math.floor(Math.random() * humanColors.length)] : 
+                aiColors[Math.floor(Math.random() * aiColors.length)],
+            speed: {
+                x: (Math.random() - 0.5) * 0.5,
+                y: (Math.random() - 0.5) * 0.5
+            },
+            pulse: Math.random() * 2 * Math.PI,
+            evolving: false,
+            evolutionTarget: null,
+            evolutionProgress: 0
+        });
+    }
+    
+    // Create evolution events
+    function triggerEvolution() {
+        // Find nodes that aren't already evolving
+        const availableHumanNodes = nodes.filter(n => n.type === 'human' && !n.evolving);
+        const availableAINodes = nodes.filter(n => n.type === 'ai' && !n.evolving);
+        
+        if (availableHumanNodes.length > 0 && availableAINodes.length > 0) {
+            // Pick random nodes to evolve together
+            const humanNode = availableHumanNodes[Math.floor(Math.random() * availableHumanNodes.length)];
+            const aiNode = availableAINodes[Math.floor(Math.random() * availableAINodes.length)];
+            
+            // Mark them as evolving
+            humanNode.evolving = true;
+            aiNode.evolving = true;
+            humanNode.evolutionTarget = aiNode;
+            aiNode.evolutionTarget = humanNode;
+            
+            // Create a connection between them
+            connections.push({
+                source: humanNode,
+                target: aiNode,
+                progress: 0,
+                lifetime: 0,
+                color: evolutionColors[Math.floor(Math.random() * evolutionColors.length)]
+            });
+        }
+        
+        // Schedule next evolution
+        setTimeout(triggerEvolution, 1000 + Math.random() * 2000);
+    }
+    
+    // Start evolution events
+    setTimeout(triggerEvolution, 1000);
+    
+    // Animation function
+    function animate() {
+        // Clear canvas
+        ctx.clearRect(0, 0, conceptCanvas.width, conceptCanvas.height);
+        
+        // Draw connections first (so they appear behind nodes)
+        connections.forEach((connection, index) => {
+            connection.progress += 0.01;
+            connection.lifetime += 0.01;
+            
+            // Calculate the current position along the path
+            const dx = connection.target.x - connection.source.x;
+            const dy = connection.target.y - connection.source.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            // Draw connection line with gradient
+            const gradient = ctx.createLinearGradient(
+                connection.source.x, connection.source.y,
+                connection.target.x, connection.target.y
+            );
+            gradient.addColorStop(0, connection.source.color);
+            gradient.addColorStop(1, connection.target.color);
+            
+            ctx.beginPath();
+            ctx.strokeStyle = gradient;
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 3]);
+            ctx.moveTo(connection.source.x, connection.source.y);
+            ctx.lineTo(connection.target.x, connection.target.y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            
+            // Draw evolution particles along the connection
+            const particleCount = 5;
+            for (let i = 0; i < particleCount; i++) {
+                const offset = (connection.progress + i/particleCount) % 1;
+                const x = connection.source.x + dx * offset;
+                const y = connection.source.y + dy * offset;
+                
+                ctx.beginPath();
+                ctx.fillStyle = connection.color;
+                ctx.arc(x, y, 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // If connection is old enough, create a new evolved node and remove the connection
+            if (connection.lifetime > 3) {
+                // Create new "evolved" node at midpoint
+                const midX = (connection.source.x + connection.target.x) / 2;
+                const midY = (connection.source.y + connection.target.y) / 2;
+                
+                nodes.push({
+                    x: midX,
+                    y: midY,
+                    radius: (connection.source.radius + connection.target.radius) / 1.5,
+                    type: 'evolved',
+                    color: connection.color,
+                    speed: {
+                        x: (Math.random() - 0.5) * 0.7,
+                        y: (Math.random() - 0.5) * 0.7
+                    },
+                    pulse: Math.random() * 2 * Math.PI,
+                    evolving: false
+                });
+                
+                // Reset the original nodes
+                connection.source.evolving = false;
+                connection.target.evolving = false;
+                
+                // Remove the connection
+                connections.splice(index, 1);
+            }
+        });
+        
+        // Update and draw nodes
+        nodes.forEach(node => {
+            // If node is evolving, move toward its target
+            if (node.evolving && node.evolutionTarget) {
+                const dx = node.evolutionTarget.x - node.x;
+                const dy = node.evolutionTarget.y - node.y;
+                node.x += dx * 0.02;
+                node.y += dy * 0.02;
+            } else {
+                // Normal movement
+                node.x += node.speed.x;
+                node.y += node.speed.y;
+                
+                // Bounce off edges
+                if (node.x < node.radius || node.x > conceptCanvas.width - node.radius) {
+                    node.speed.x *= -1;
+                }
+                if (node.y < node.radius || node.y > conceptCanvas.height - node.radius) {
+                    node.speed.y *= -1;
+                }
+            }
+            
+            // Draw node with pulsing effect
+            node.pulse += 0.05;
+            const pulseScale = 1 + Math.sin(node.pulse) * 0.2;
+            
+            // Draw glow
+            const gradient = ctx.createRadialGradient(
+                node.x, node.y, 0,
+                node.x, node.y, node.radius * 2.5
+            );
+            gradient.addColorStop(0, node.color);
+            gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            
+            ctx.beginPath();
+            ctx.fillStyle = gradient;
+            ctx.arc(node.x, node.y, node.radius * 2.5 * pulseScale, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw node
+            ctx.beginPath();
+            ctx.fillStyle = node.color;
+            ctx.arc(node.x, node.y, node.radius * pulseScale, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Add a symbol inside based on type
+            ctx.fillStyle = '#FFFFFF';
+            if (node.type === 'human') {
+                // Human symbol (simple person)
+                ctx.fillRect(node.x - node.radius * 0.2, node.y - node.radius * 0.3, node.radius * 0.4, node.radius * 0.6);
+                ctx.beginPath();
+                ctx.arc(node.x, node.y - node.radius * 0.5, node.radius * 0.3, 0, Math.PI * 2);
+                ctx.fill();
+            } else if (node.type === 'ai') {
+                // AI symbol (circuit-like pattern)
+                const size = node.radius * 0.6;
+                ctx.beginPath();
+                ctx.moveTo(node.x - size, node.y - size);
+                ctx.lineTo(node.x + size, node.y - size);
+                ctx.lineTo(node.x + size, node.y + size);
+                ctx.lineTo(node.x - size, node.y + size);
+                ctx.closePath();
+                ctx.stroke();
+                
+                ctx.beginPath();
+                ctx.moveTo(node.x, node.y - size);
+                ctx.lineTo(node.x, node.y + size);
+                ctx.moveTo(node.x - size, node.y);
+                ctx.lineTo(node.x + size, node.y);
+                ctx.stroke();
+            } else if (node.type === 'evolved') {
+                // Evolved symbol (star/burst)
+                const points = 6;
+                const innerRadius = node.radius * 0.3;
+                const outerRadius = node.radius * 0.7;
+                
+                ctx.beginPath();
+                for (let i = 0; i < points * 2; i++) {
+                    const radius = i % 2 === 0 ? outerRadius : innerRadius;
+                    const angle = (i / (points * 2)) * Math.PI * 2;
+                    const x = node.x + Math.cos(angle) * radius;
+                    const y = node.y + Math.sin(angle) * radius;
+                    
+                    if (i === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+                ctx.closePath();
+                ctx.fill();
+            }
+        });
+        
+        // Add some floating text/concept labels that occasionally appear
+        if (Math.random() < 0.005 && container.classList.contains('fade-in')) {
+            const concepts = ['Co-evolution', 'Synergy', 'Augmentation', 'Symbiosis', 
+                             'Integration', 'Amplification', 'Enhancement', 'Adaptation'];
+            const concept = concepts[Math.floor(Math.random() * concepts.length)];
+            
+            const conceptText = document.createElement('div');
+            conceptText.className = 'floating-concept';
+            conceptText.textContent = concept;
+            conceptText.style.left = Math.random() * (conceptCanvas.width - 150) + 'px';
+            conceptText.style.top = Math.random() * (conceptCanvas.height - 50) + 'px';
+            
+            container.appendChild(conceptText);
+            
+            // Animate it
+            gsap.fromTo(conceptText, 
+                { opacity: 0, scale: 0.5 }, 
+                { opacity: 1, scale: 1, duration: 1 }
+            );
+            
+            // Then fade out and remove
+            setTimeout(() => {
+                gsap.to(conceptText, {
+                    opacity: 0, 
+                    y: '-=30', 
+                    duration: 1.5,
+                    onComplete: () => {
+                        if (conceptText.parentNode === container) {
+                            container.removeChild(conceptText);
+                        }
+                    }
+                });
+            }, 3000);
+        }
+        
+        if (container.classList.contains('fade-in')) {
+            requestAnimationFrame(animate);
+        }
+    }
+    
+    // Handle window resize
+    function resizeConceptCanvas() {
+        conceptCanvas.width = container.clientWidth;
+        conceptCanvas.height = container.clientHeight;
+    }
+    
+    window.addEventListener('resize', resizeConceptCanvas);
+    
+    // Start animation loop
+    animate();
 }
 
 function setupBackgroundCanvas() {
@@ -316,534 +602,6 @@ function setupBackgroundCanvas() {
     
     // Start animation
     draw();
-}
-
-// Global variable to track animation state
-let isAnimationComplete = false;
-
-function setup3DAnimation() {
-    const container = document.getElementById('animation-container');
-    
-    // Create scene
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setClearColor(0xffffff, 0);
-    container.appendChild(renderer.domElement);
-    
-    // Set camera position
-    camera.position.z = 15;
-    
-    // Create a more detailed computer model
-    const computerGroup = createComputerModel();
-    
-    // Create a more detailed human model
-    const humanGroup = createHumanModel();
-    
-    // Position initial models
-    computerGroup.position.x = -8;
-    humanGroup.position.x = 8;
-    
-    scene.add(computerGroup);
-    scene.add(humanGroup);
-    
-    // Create ambient light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
-    scene.add(ambientLight);
-    
-    // Add directional light
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(0, 10, 10);
-    scene.add(directionalLight);
-    
-    // Animation variables
-    let mergeProgress = 0;
-    let merged = false;
-    let rotationSpeed = 0;
-    
-    // Create the merged entity in advance (but don't add to scene yet)
-    const mergedGroup = createMergedEntity();
-    
-    // Floating particles
-    const particles = createParticles();
-    scene.add(particles);
-    
-    // Animation loop
-    function animate() {
-        requestAnimationFrame(animate);
-        
-        // Animate particles
-        if (particles.children.length > 0) {
-            particles.children.forEach((particle, i) => {
-                particle.position.y += Math.sin(Date.now() * 0.001 + i) * 0.01;
-                particle.rotation.y += 0.01;
-            });
-        }
-        
-        if (container.classList.contains('fade-in') && !isAnimationComplete) {
-            if (!merged && mergeProgress < 1) {
-                // Move computer and human toward center with slight oscillation
-                mergeProgress += 0.01;
-                
-                computerGroup.position.x = -8 + mergeProgress * 8;
-                humanGroup.position.x = 8 - mergeProgress * 8;
-                
-                // Add subtle movement
-                computerGroup.position.y = Math.sin(mergeProgress * Math.PI * 2) * 0.3;
-                humanGroup.position.y = Math.sin(mergeProgress * Math.PI * 2 + Math.PI) * 0.3;
-                
-                // Add subtle rotation
-                computerGroup.rotation.z = Math.sin(mergeProgress * Math.PI) * 0.1;
-                humanGroup.rotation.z = -Math.sin(mergeProgress * Math.PI) * 0.1;
-                
-                // Start rotation after halfway
-                if (mergeProgress > 0.5) {
-                    rotationSpeed += 0.0008;
-                    computerGroup.rotation.y += rotationSpeed;
-                    humanGroup.rotation.y += rotationSpeed;
-                }
-                
-                // Create merged entity
-                if (mergeProgress >= 1) {
-                    merged = true;
-                    
-                    // Hide separate entities
-                    scene.remove(computerGroup);
-                    scene.remove(humanGroup);
-                    
-                    // Add merged entity
-                    scene.add(mergedGroup);
-                    
-                    // Set initial rotation
-                    mergedGroup.rotation.y = Math.PI / 4;
-                    
-                    // Use GSAP for a nice intro animation
-                    gsap.from(mergedGroup.scale, {
-                        x: 0.6, y: 0.6, z: 0.6,
-                        duration: 1.5,
-                        ease: "elastic.out(1, 0.3)"
-                    });
-                    
-                    // Add light animation
-                    const pointLight = new THREE.PointLight(0x9277FF, 2, 10);
-                    pointLight.position.set(0, 0, 2);
-                    mergedGroup.add(pointLight);
-                    
-                    // Animate the light intensity
-                    gsap.to(pointLight, {
-                        intensity: 0.8,
-                        duration: 2,
-                        yoyo: true,
-                        repeat: -1,
-                        ease: "sine.inOut"
-                    });
-                    
-                    // Mark animation as complete
-                    isAnimationComplete = true;
-                }
-            } else if (merged) {
-                // Rotate merged entity when complete
-                mergedGroup.rotation.y += 0.007;
-                mergedGroup.rotation.x = Math.sin(Date.now() * 0.001) * 0.15;
-                
-                // Complex breathing animation
-                const breathScale = 1 + Math.sin(Date.now() * 0.002) * 0.02;
-                mergedGroup.scale.set(breathScale, breathScale, breathScale);
-                
-                // Slight floating movement
-                mergedGroup.position.y = Math.sin(Date.now() * 0.001) * 0.2;
-            }
-        }
-        
-        renderer.render(scene, camera);
-    }
-    
-    // Handle window resize
-    window.addEventListener('resize', () => {
-        const width = container.clientWidth;
-        const height = container.clientHeight;
-        
-        camera.aspect = width / height;
-        camera.updateProjectionMatrix();
-        
-        renderer.setSize(width, height);
-    });
-    
-    // Start animation
-    animate();
-}
-
-function createComputerModel() {
-    const group = new THREE.Group();
-
-    // CRT-like monitor shell with curved edges
-    const shellGeometry = new THREE.SphereGeometry(3.2, 32, 16, 0, Math.PI);
-    shellGeometry.scale(1, 0.65, 1);
-    const shellMaterial = new THREE.MeshBasicMaterial({
-        color: 0x333333,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.75
-    });
-    const shell = new THREE.Mesh(shellGeometry, shellMaterial);
-    shell.rotation.x = -Math.PI / 2;
-    group.add(shell);
-
-    // Smoothly curved screen surface inside the shell
-    const screenGeometry = new THREE.SphereGeometry(2.7, 32, 16, 0, Math.PI);
-    screenGeometry.scale(1, 0.6, 1);
-    const screenMaterial = new THREE.MeshBasicMaterial({
-        color: 0x55FF55,
-        transparent: true,
-        opacity: 0.15
-    });
-    const screen = new THREE.Mesh(screenGeometry, screenMaterial);
-    screen.rotation.x = -Math.PI / 2;
-    screen.position.z = 0.05;
-    group.add(screen);
-
-    // Subtle GSAP glow pulse on the screen
-    gsap.to(screenMaterial, {
-        opacity: 0.4,
-        duration: 2,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut"
-    });
-
-    // Internal circuit “rings” that revolve inside
-    const circuitGroup = new THREE.Group();
-    for (let i = 0; i < 4; i++) {
-        const ringGeom = new THREE.RingGeometry(1.5 + i * 0.3, 1.7 + i * 0.3, 64);
-        const ringMat = new THREE.MeshBasicMaterial({
-            color: 0x55FF55,
-            side: THREE.DoubleSide,
-            transparent: true,
-            opacity: 0.4 - i * 0.06
-        });
-        const ring = new THREE.Mesh(ringGeom, ringMat);
-        ring.rotation.x = -Math.PI / 2;
-        ring.position.y = -0.2 * i;
-        circuitGroup.add(ring);
-    }
-    group.add(circuitGroup);
-
-    // Animate the circuit rings rotating at slightly different speeds
-    gsap.to(circuitGroup.rotation, {
-        z: "+=6.283", // 2π rotation
-        duration: 20,
-        repeat: -1,
-        ease: "none"
-    });
-
-    // Stylized CPU block at bottom of screen
-    const cpuGeometry = new THREE.BoxGeometry(1, 0.4, 1);
-    const cpuMaterial = new THREE.MeshBasicMaterial({
-        color: 0xFFFF55,
-        transparent: true,
-        opacity: 0.8
-    });
-    const cpu = new THREE.Mesh(cpuGeometry, cpuMaterial);
-    cpu.position.y = -1.8;
-    group.add(cpu);
-
-    // Animate CPU color flicker
-    gsap.to(cpuMaterial, {
-        opacity: 0.2,
-        duration: 1.2,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut"
-    });
-
-    // Keyboard-like base using torus geometry
-    const keyboardTorusGeometry = new THREE.TorusGeometry(3, 0.15, 16, 50);
-    const keyboardTorusMaterial = new THREE.MeshBasicMaterial({
-        color: 0x333333,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.5
-    });
-    const keyboardTorus = new THREE.Mesh(keyboardTorusGeometry, keyboardTorusMaterial);
-    keyboardTorus.rotation.x = Math.PI / 2;
-    keyboardTorus.position.y = -3;
-    group.add(keyboardTorus);
-
-    // Slight overall rotation to keep it moving
-    gsap.to(group.rotation, {
-        y: "+=6.283",
-        duration: 25,
-        repeat: -1,
-        ease: "none"
-    });
-
-    return group;
-}
-
-function createHumanModel() {
-    const group = new THREE.Group();
-
-    // Create a head with a “low-poly” sphere aesthetic
-    const headGeometry = new THREE.SphereGeometry(1.2, 12, 8);
-    const headMaterial = new THREE.MeshBasicMaterial({
-        color: 0x888888,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.8
-    });
-    const head = new THREE.Mesh(headGeometry, headMaterial);
-    head.position.y = 3.5;
-    group.add(head);
-
-    // Add orbiting “thought orbs” around head
-    const thoughtGroup = new THREE.Group();
-    for (let i = 0; i < 5; i++) {
-        const orbGeom = new THREE.SphereGeometry(0.15, 8, 8);
-        const orbMat = new THREE.MeshBasicMaterial({
-            color: 0x00FF99,
-            transparent: true,
-            opacity: 0.7
-        });
-        const orb = new THREE.Mesh(orbGeom, orbMat);
-
-        // Place them in a ring around the head
-        const angle = (i / 5) * Math.PI * 2;
-        const radius = 2;
-        orb.position.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
-        thoughtGroup.add(orb);
-
-        // Animate each orb’s scale pulsation
-        gsap.to(orb.scale, {
-            x: 1.3,
-            y: 1.3,
-            z: 1.3,
-            duration: 1 + Math.random(),
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-            delay: i * 0.2
-        });
-    }
-    thoughtGroup.position.y = 3.5;
-    group.add(thoughtGroup);
-
-    // Rotate the entire thought group
-    gsap.to(thoughtGroup.rotation, {
-        y: "+=6.283",
-        duration: 10,
-        repeat: -1,
-        ease: "none"
-    });
-
-    // Torso: Stylized shape from lathe geometry
-    const torsoPoints = [];
-    for (let i = 0; i <= 10; i++) {
-        // y from 0 -> -3, radius from 1 -> 0.3
-        const y = -0.3 * i;
-        const r = 1 - (i / 10) * 0.7;
-        torsoPoints.push(new THREE.Vector2(r, y));
-    }
-    const torsoGeometry = new THREE.LatheGeometry(torsoPoints, 12);
-    const torsoMaterial = new THREE.MeshBasicMaterial({
-        color: 0x666666,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.6
-    });
-    const torso = new THREE.Mesh(torsoGeometry, torsoMaterial);
-    torso.position.y = 1;
-    group.add(torso);
-
-    // Arms made of arcs
-    const armGroup = new THREE.Group();
-    for (let side of [-1, 1]) {
-        const arcShape = new THREE.TorusGeometry(0.9, 0.15, 8, 16, Math.PI);
-        const arcMat = new THREE.MeshBasicMaterial({
-            color: 0xAAAAAA,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.5
-        });
-        const arc = new THREE.Mesh(arcShape, arcMat);
-        arc.rotation.z = side === -1 ? Math.PI / 2 : -Math.PI / 2;
-        arc.position.set(side * 1.0, 0.6, 0);
-        armGroup.add(arc);
-    }
-    armGroup.position.y = 1;
-    group.add(armGroup);
-
-    // Legs made of two elongated cones
-    const legGroup = new THREE.Group();
-    for (let side of [-1, 1]) {
-        const legGeometry = new THREE.CylinderGeometry(0.2, 0.4, 2.5, 8, 1, true);
-        const legMaterial = new THREE.MeshBasicMaterial({
-            color: 0x888888,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.5
-        });
-        const leg = new THREE.Mesh(legGeometry, legMaterial);
-        leg.position.x = side * 0.5;
-        leg.position.y = -2.6;
-        leg.rotation.x = -Math.PI / 2;
-        legGroup.add(leg);
-    }
-    group.add(legGroup);
-
-    // Subtle entire rotation
-    gsap.to(group.rotation, {
-        y: "+=6.283",
-        duration: 20,
-        repeat: -1,
-        ease: "none"
-    });
-
-    return group;
-}
-
-function createMergedEntity() {
-    const group = new THREE.Group();
-
-    // Hybrid shape: a set of swirling curves + partial “body” + partial “monitor”
-    // We'll create a large swirl ring that transitions from “human” side to “computer” side
-    const swirlGroup = new THREE.Group();
-    const swirlMaterial = new THREE.LineBasicMaterial({
-        color: 0xFFFF00,
-        transparent: true,
-        opacity: 0.7
-    });
-    const swirlGeometry = new THREE.BufferGeometry();
-    const swirlPoints = [];
-    const swirlSegments = 200;
-    for (let i = 0; i <= swirlSegments; i++) {
-        const t = i / swirlSegments; 
-        const angle = t * Math.PI * 6; // multiple revolutions
-        // radius transitions from 1 -> 3 -> 1
-        const radius = 1 + 2 * Math.sin(t * Math.PI);
-        const x = radius * Math.cos(angle);
-        const y = -5 + t * 10;         // swirl from bottom to top
-        const z = radius * Math.sin(angle);
-        swirlPoints.push(x, y, z);
-    }
-    swirlGeometry.setAttribute("position", new THREE.Float32BufferAttribute(swirlPoints, 3));
-    const swirlLine = new THREE.Line(new THREE.BufferGeometry(), swirlMaterial);
-    swirlLine.geometry = swirlGeometry;
-    swirlGroup.add(swirlLine);
-
-    // Animate swirl color flicker
-    gsap.to(swirlMaterial, {
-        opacity: 0.2,
-        duration: 2,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut"
-    });
-
-    group.add(swirlGroup);
-
-    // Hybrid "body" using extruded shape
-    const shape = new THREE.Shape();
-    shape.moveTo(-1, 0);
-    shape.bezierCurveTo(-1.5, 1, -1.5, 3, -0.5, 4);
-    shape.bezierCurveTo(0.5, 5, 1.5, 5, 1.5, 3);
-    shape.bezierCurveTo(1.5, 1, 0.5, -0.5, -1, 0);
-    const extrudeSettings = { depth: 0.2, bevelEnabled: false, steps: 1 };
-    const hybridBodyGeometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-    const hybridBodyMaterial = new THREE.MeshBasicMaterial({
-        color: 0x00FFEE,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.5
-    });
-    const hybridBody = new THREE.Mesh(hybridBodyGeometry, hybridBodyMaterial);
-    hybridBody.rotation.x = Math.PI / 2;
-    hybridBody.rotation.z = Math.PI / 2;
-    hybridBody.position.y = -2;
-    group.add(hybridBody);
-
-    // A floating ring to represent the “merged” synergy
-    const synergyRingGeometry = new THREE.RingGeometry(0.8, 1.0, 32);
-    const synergyRingMaterial = new THREE.MeshBasicMaterial({
-        color: 0xFF00FF,
-        side: THREE.DoubleSide,
-        transparent: true,
-        opacity: 0.4
-    });
-    const synergyRing = new THREE.Mesh(synergyRingGeometry, synergyRingMaterial);
-    synergyRing.position.y = 2;
-    group.add(synergyRing);
-
-    // Animate the synergy ring
-    gsap.to(synergyRing.rotation, {
-        x: "+=6.283",
-        duration: 4,
-        repeat: -1,
-        ease: "none"
-    });
-    gsap.to(synergyRing.scale, {
-        x: 1.2,
-        y: 1.2,
-        duration: 1.2,
-        repeat: -1,
-        yoyo: true,
-        ease: "sine.inOut"
-    });
-
-    // A subtle overall rotation
-    gsap.to(group.rotation, {
-        y: "+=6.283",
-        duration: 30,
-        repeat: -1,
-        ease: "none"
-    });
-
-    return group;
-}
-
-function createParticles() {
-    const group = new THREE.Group();
-
-    // Color set with bright neon tints
-    const colors = [0xFF00FF, 0x00FFFF, 0xFFFF00, 0xFFAA00];
-
-    for (let i = 0; i < 70; i++) {
-        const size = 0.05 + Math.random() * 0.1;
-        const particleGeometry = new THREE.SphereGeometry(size, 8, 8);
-        const particleMaterial = new THREE.MeshBasicMaterial({
-            color: colors[Math.floor(Math.random() * colors.length)],
-            transparent: true,
-            opacity: 0.2 + Math.random() * 0.5
-        });
-        const particle = new THREE.Mesh(particleGeometry, particleMaterial);
-
-        // Random spherical distribution
-        const radius = 6 + Math.random() * 6;
-        const theta = Math.random() * Math.PI * 2;
-        const phi = Math.random() * Math.PI;
-        particle.position.x = radius * Math.sin(phi) * Math.cos(theta);
-        particle.position.y = radius * Math.sin(phi) * Math.sin(theta);
-        particle.position.z = radius * Math.cos(phi);
-
-        // Optional rotation variation
-        particle.rotation.x = Math.random() * Math.PI;
-        particle.rotation.y = Math.random() * Math.PI;
-
-        group.add(particle);
-
-        // Animate random float movement
-        gsap.to(particle.position, {
-            y: particle.position.y + (Math.random() * 2 - 1),
-            duration: 3 + Math.random() * 2,
-            repeat: -1,
-            yoyo: true,
-            ease: "sine.inOut",
-            delay: Math.random()
-        });
-    }
-
-    return group;
 }
 
 // Smooth scrolling for anchor links

@@ -880,4 +880,104 @@ footer {
     .code-animation-container {
         height: 250px;
     }
+}
+
+/* Scroll Hint */
+#scroll-hint {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 10;
+    pointer-events: none;
+}
+
+#scroll-hint.visible {
+    opacity: 1;
+}
+
+#scroll-hint .arrow {
+    width: 20px;
+    height: 20px;
+    border-right: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+    transform: rotate(45deg);
+    margin-bottom: 10px;
+    animation: bounce 2s infinite;
+}
+
+#scroll-hint .pulse {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(100, 100, 100, 0.1);
+    animation: pulse 2s infinite;
+}
+
+#scroll-hint span {
+    color: var(--text-dark);
+    font-size: 14px;
+    margin-top: 5px;
+    font-weight: 500;
+    opacity: 0.7;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0) rotate(45deg);
+    }
+    40% {
+        transform: translateY(-10px) rotate(45deg);
+    }
+    60% {
+        transform: translateY(-5px) rotate(45deg);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: translateX(-50%) scale(0.8);
+        opacity: 0.7;
+    }
+    70% {
+        transform: translateX(-50%) scale(1.5);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(-50%) scale(0.8);
+        opacity: 0;
+    }
+}
+
+/* Floating concept text elements */
+.floating-concept {
+    position: absolute;
+    color: var(--text-dark);
+    font-weight: 500;
+    padding: 8px 15px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    box-shadow: var(--shadow-sm);
+    pointer-events: none;
+    z-index: 2;
+    font-size: 14px;
+    border: 1px solid rgba(200, 200, 200, 0.4);
+}
+
+/* Canvas for concept visualization */
+#concept-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 } 
