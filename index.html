@@ -1,13 +1,78 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Co-evolve | Evolving the human mind with AI</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="center-logo">
+            <h1>Co-evolve</h1>
+        </div>
+        
+        <div class="initiatives">
+            <div class="initiative" data-color="golden" data-name="Lindy">
+                <div class="initiative-inner">
+                    <h3>Lindy</h3>
+                    <p class="mission">Shifting the paradigm of how humans and AI interact—toward continuous, personal, and intuitive knowledge.</p>
+                </div>
+            </div>
+            
+            <div class="initiative" data-color="purple" data-name="Capybara">
+                <div class="initiative-inner">
+                    <h3>Capybara</h3>
+                    <p class="mission">Reimagining digital presence for a world where language models mediate understanding.</p>
+                </div>
+            </div>
+            
+            <div class="initiative" data-color="lightblue" data-name="Minary">
+                <div class="initiative-inner">
+                    <h3>Minary</h3>
+                    <p class="mission">Transforming the architecture of work by organizing it around meaning, not format.</p>
+                </div>
+            </div>
+            
+            <div class="initiative" data-color="salmon" data-name="Suddenly">
+                <div class="initiative-inner">
+                    <h3>Suddenly</h3>
+                    <p class="mission">"Gradually, then suddenly"—accelerating AI transformation where it's needed most.</p>
+                </div>
+            </div>
+            
+            <div class="initiative" data-color="red" data-name="Human Intelligence">
+                <div class="initiative-inner">
+                    <h3>Human Intelligence</h3>
+                    <p class="mission">Pursuing the art of effortless interaction between humans and intelligent systems.</p>
+                </div>
+            </div>
+            
+            <div class="initiative" data-color="black" data-name="Solid Intelligence">
+                <div class="initiative-inner">
+                    <h3>Solid Intelligence</h3>
+                    <p class="mission">Envisioning a world where intelligence is ambient, embedded, and silent.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="modal-title"></h2>
+            <p id="modal-description"></p>
+            <div class="contact">
+                <p>To learn more, reach out to <a href="mailto:hello@co-evolve.ai">hello@co-evolve.ai</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <canvas id="neural-network"></canvas>
+    
+    <script src="script.js"></script>
+</body>
+</html> 

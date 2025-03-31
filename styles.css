@@ -1,0 +1,299 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --golden: #D4AF37;
+    --purple: #7B68EE;
+    --lightblue: #87CEFA;
+    --salmon: #FA8072;
+    --red: #B22222;
+    --black: #121212;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #030303;
+    min-height: 100vh;
+    overflow: hidden;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+}
+
+.center-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    text-align: center;
+}
+
+.center-logo h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 5rem;
+    letter-spacing: 0.2rem;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    opacity: 0;
+    animation: fadeIn 2s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.initiatives {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.initiative {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    opacity: 0;
+    animation: fadeIn 2s ease-in-out forwards;
+    transition: all 0.5s ease;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.initiative-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    text-align: center;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.initiative h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin-bottom: 5px;
+    transition: all 0.3s ease;
+}
+
+.initiative .mission {
+    opacity: 0;
+    height: 0;
+    font-size: 0;
+    transition: all 0.3s ease;
+}
+
+.initiative:hover {
+    width: 220px;
+    height: 220px;
+    z-index: 20;
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.2);
+}
+
+.initiative:hover .mission {
+    opacity: 1;
+    height: auto;
+    font-size: 0.75rem;
+    margin-top: 10px;
+    line-height: 1.4;
+}
+
+.initiative:hover h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+/* Initiative colors */
+.initiative[data-color="golden"] {
+    background: radial-gradient(circle at center, rgba(212, 175, 55, 0.3), rgba(212, 175, 55, 0.1));
+    border: 1px solid rgba(212, 175, 55, 0.5);
+}
+.initiative[data-color="golden"]:hover {
+    background: radial-gradient(circle at center, rgba(212, 175, 55, 0.5), rgba(212, 175, 55, 0.3));
+}
+
+.initiative[data-color="purple"] {
+    background: radial-gradient(circle at center, rgba(123, 104, 238, 0.3), rgba(123, 104, 238, 0.1));
+    border: 1px solid rgba(123, 104, 238, 0.5);
+}
+.initiative[data-color="purple"]:hover {
+    background: radial-gradient(circle at center, rgba(123, 104, 238, 0.5), rgba(123, 104, 238, 0.3));
+}
+
+.initiative[data-color="lightblue"] {
+    background: radial-gradient(circle at center, rgba(135, 206, 250, 0.3), rgba(135, 206, 250, 0.1));
+    border: 1px solid rgba(135, 206, 250, 0.5);
+}
+.initiative[data-color="lightblue"]:hover {
+    background: radial-gradient(circle at center, rgba(135, 206, 250, 0.5), rgba(135, 206, 250, 0.3));
+}
+
+.initiative[data-color="salmon"] {
+    background: radial-gradient(circle at center, rgba(250, 128, 114, 0.3), rgba(250, 128, 114, 0.1));
+    border: 1px solid rgba(250, 128, 114, 0.5);
+}
+.initiative[data-color="salmon"]:hover {
+    background: radial-gradient(circle at center, rgba(250, 128, 114, 0.5), rgba(250, 128, 114, 0.3));
+}
+
+.initiative[data-color="red"] {
+    background: radial-gradient(circle at center, rgba(178, 34, 34, 0.3), rgba(178, 34, 34, 0.1));
+    border: 1px solid rgba(178, 34, 34, 0.5);
+}
+.initiative[data-color="red"]:hover {
+    background: radial-gradient(circle at center, rgba(178, 34, 34, 0.5), rgba(178, 34, 34, 0.3));
+}
+
+.initiative[data-color="black"] {
+    background: radial-gradient(circle at center, rgba(18, 18, 18, 0.7), rgba(18, 18, 18, 0.4));
+    border: 1px solid rgba(50, 50, 50, 0.8);
+}
+.initiative[data-color="black"]:hover {
+    background: radial-gradient(circle at center, rgba(18, 18, 18, 0.9), rgba(18, 18, 18, 0.6));
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: rgba(10, 10, 10, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 500px;
+    width: 90%;
+    padding: 40px;
+    border-radius: 4px;
+    position: relative;
+    transform: translateY(30px);
+    transition: transform 0.5s ease;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+}
+
+.modal.active .modal-content {
+    transform: translateY(0);
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.5rem;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: #fff;
+}
+
+.modal h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    font-weight: 400;
+}
+
+.modal p {
+    line-height: 1.6;
+    margin-bottom: 20px;
+    font-weight: 300;
+    font-size: 1rem;
+}
+
+.contact {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.contact a {
+    color: #fff;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.contact a:hover {
+    opacity: 0.7;
+}
+
+#neural-network {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    opacity: 0.2;
+    pointer-events: none;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    .center-logo h1 {
+        font-size: 3.5rem;
+    }
+    
+    .initiative {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .initiative:hover {
+        width: 160px;
+        height: 160px;
+    }
+    
+    .initiative h3 {
+        font-size: 0.9rem;
+    }
+    
+    .initiative:hover h3 {
+        font-size: 1.2rem;
+    }
+    
+    .initiative:hover .mission {
+        font-size: 0.7rem;
+    }
+} 

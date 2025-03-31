@@ -1,54 +1,46 @@
-# React + TypeScript + Vite
+# Co-evolve Landing Page
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A visually captivating and minimalistic landing page for Co-evolve, a visionary AI company focused on evolving the human mind with AI.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Elegant minimalist design with "Co-evolve" at the center
+- Six floating, interactive initiatives that orbit around the center
+- Neural network background effect connecting initiatives
+- Modal popups with detailed descriptions
+- Fully responsive design that works across devices
 
-## Expanding the ESLint configuration
+## Setup
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. Clone this repository
+2. Open `index.html` in your browser to view the landing page
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+No build tools or dependencies are required. This is a pure HTML, CSS, and JavaScript implementation.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Deployment to GitHub Pages
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+To deploy this landing page to GitHub Pages:
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+1. Create a new GitHub repository
+2. Push the contents of this folder to the repository
+3. Go to repository Settings > Pages
+4. Under "Source", select "main" (or "master") branch
+5. Click "Save" to deploy
+6. Your site will be published at `https://[your-username].github.io/[repository-name]/`
+
+## Local Development
+
+To make changes:
+
+1. Edit the HTML, CSS, or JavaScript files as needed
+2. Refresh your browser to see changes
+
+## Customization
+
+- Colors: Edit the CSS variables in `styles.css` to change the color scheme
+- Content: Modify the initiative descriptions in the JavaScript file
+- Layout: Adjust the size and positioning in CSS as needed
+
+## License
+
+[MIT License](LICENSE) 
