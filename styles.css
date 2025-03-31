@@ -14,7 +14,7 @@
     
     --primary: #121212;
     --secondary: #FFFFFF;
-    --accent: #6F5CFA;
+    --accent: #2D2D2D;
     
     --text-primary: #000000;
     --text-secondary: #555561;
@@ -25,17 +25,17 @@
     
     --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.08);
-    --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.06), 0 4px 16px rgba(0, 0, 0, 0.08);
-    --shadow-lg: 0 15px 30px -3px rgba(0, 0, 0, 0.1);
+    --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 20px 30px -5px rgba(0, 0, 0, 0.15);
 }
 
 body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Space Grotesk', 'Inter', system-ui, -apple-system, sans-serif;
     background-color: var(--secondary);
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.01em;
 }
 
 .container {
@@ -46,22 +46,22 @@ body {
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
+    font-family: 'General Sans', sans-serif;
     font-weight: 600;
     line-height: 1.2;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.03em;
 }
 
 h1 {
-    font-size: 2.5rem;
+    font-size: 3.5rem;
     margin-bottom: 1.5rem;
-    font-weight: 700;
-    letter-spacing: -0.035em;
+    font-weight: 600;
 }
 
 h2 {
     font-size: 2rem;
     margin-bottom: 1.25rem;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 h3 {
@@ -88,16 +88,17 @@ a {
 }
 
 a:hover {
-    color: rgba(111, 92, 250, 0.8);
+    color: var(--primary);
 }
 
 /* Buttons */
 .btn-primary, .btn-secondary {
+    font-family: 'General Sans', sans-serif;
     display: inline-block;
     padding: 0.75rem 1.5rem;
     border-radius: 0.25rem;
     font-weight: 500;
-    font-size: 1rem;
+    font-size: 0.95rem;
     text-align: center;
     transition: all 0.2s ease-in-out;
 }
@@ -109,7 +110,7 @@ a:hover {
 }
 
 .btn-primary:hover {
-    background-color: rgba(111, 92, 250, 0.9);
+    background-color: rgba(45, 45, 45, 0.9);
     transform: translateY(-1px);
     box-shadow: var(--shadow-sm);
 }
@@ -136,7 +137,8 @@ header {
 }
 
 .logo {
-    font-weight: 700;
+    font-family: 'General Sans', sans-serif;
+    font-weight: 600;
     font-size: 1.5rem;
     color: var(--text-primary);
     letter-spacing: -0.03em;
@@ -154,6 +156,7 @@ nav ul li {
 nav ul li a {
     color: var(--text-primary);
     font-weight: 500;
+    font-family: 'General Sans', sans-serif;
 }
 
 nav ul li a:hover {
@@ -167,28 +170,73 @@ nav ul li a:hover {
 
 /* Hero Section */
 .hero {
-    padding: 4rem 0 6rem;
-    text-align: center;
-    max-width: 800px;
+    padding: 5rem 0 7rem;
+    max-width: 1050px;
     margin: 0 auto;
 }
 
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .hero h1 {
-    font-size: 3rem;
-    margin-bottom: 1.5rem;
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    line-height: 1.1;
+}
+
+.with-highlight {
+    position: relative;
+    display: inline-block;
+}
+
+.with-highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    width: 100%;
+    height: 12px;
+    background-color: rgba(146, 119, 255, 0.2);
+    z-index: -1;
 }
 
 .subtitle {
-    font-size: 1.25rem;
+    font-size: 1.4rem;
     color: var(--text-secondary);
-    margin-bottom: 2.5rem;
+    margin-bottom: 3rem;
     font-weight: 400;
+    text-align: center;
+    max-width: 650px;
 }
 
-.cta-buttons {
+.hero-graphics {
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.code-snippet {
+    background-color: #F7F7F7;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 500px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #333;
+    overflow-x: auto;
+    box-shadow: var(--shadow-sm);
+}
+
+.code-snippet code {
+    white-space: pre;
 }
 
 /* Initiatives Section */
@@ -199,7 +247,7 @@ nav ul li a:hover {
 .initiatives h2 {
     text-align: center;
     margin-bottom: 3rem;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .initiatives-grid {
@@ -209,7 +257,7 @@ nav ul li a:hover {
 }
 
 .initiative-card {
-    border-radius: 0.5rem;
+    border-radius: 0; /* Square edges */
     border: 1px solid var(--border-light);
     overflow: hidden;
     transition: all 0.2s ease-in-out;
@@ -221,6 +269,7 @@ nav ul li a:hover {
 .initiative-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
+    border-color: #D0D0D6;
 }
 
 .card-content {
@@ -231,14 +280,27 @@ nav ul li a:hover {
     margin-bottom: 1.5rem;
 }
 
+.initiative-icon svg path, 
+.initiative-icon svg circle, 
+.initiative-icon svg rect {
+    stroke: var(--accent);
+}
+
+.initiative-card[data-color="purple"] .initiative-icon svg path,
+.initiative-card[data-color="purple"] .initiative-icon svg circle {
+    stroke: var(--purple);
+}
+
 .initiative-card h3 {
     margin-bottom: 1rem;
     font-weight: 600;
+    color: var(--text-primary);
 }
 
 .initiative-card p {
     color: var(--text-secondary);
     margin-bottom: 1.5rem;
+    font-size: 1rem;
 }
 
 .learn-more {
@@ -247,6 +309,10 @@ nav ul li a:hover {
     color: var(--accent);
     font-weight: 500;
     cursor: pointer;
+}
+
+.initiative-card[data-color="purple"] .learn-more {
+    color: var(--purple);
 }
 
 .learn-more svg {
@@ -258,29 +324,17 @@ nav ul li a:hover {
     transform: translateX(0.25rem);
 }
 
-/* Initiative card colors */
-.initiative-card[data-color="golden"] h3 {
-    color: var(--golden);
+/* Initiative card colors - only keep purple as colored */
+.initiative-card[data-color="golden"] h3,
+.initiative-card[data-color="lightblue"] h3,
+.initiative-card[data-color="salmon"] h3,
+.initiative-card[data-color="red"] h3,
+.initiative-card[data-color="black"] h3 {
+    color: var(--text-primary);
 }
 
 .initiative-card[data-color="purple"] h3 {
     color: var(--purple);
-}
-
-.initiative-card[data-color="lightblue"] h3 {
-    color: var(--lightblue);
-}
-
-.initiative-card[data-color="salmon"] h3 {
-    color: var(--salmon);
-}
-
-.initiative-card[data-color="red"] h3 {
-    color: var(--red);
-}
-
-.initiative-card[data-color="black"] h3 {
-    color: var(--black);
 }
 
 /* Footer */
@@ -297,7 +351,8 @@ footer {
 }
 
 .footer-logo {
-    font-weight: 700;
+    font-family: 'General Sans', sans-serif;
+    font-weight: 600;
     font-size: 1.25rem;
     color: var(--text-primary);
     margin-bottom: 1rem;
@@ -313,6 +368,7 @@ footer {
     margin-bottom: 1.5rem;
     color: var(--text-primary);
     font-weight: 600;
+    font-family: 'General Sans', sans-serif;
 }
 
 .footer-column ul {
@@ -329,7 +385,7 @@ footer {
 }
 
 .footer-column ul li a:hover {
-    color: var(--accent);
+    color: var(--text-primary);
 }
 
 .footer-bottom {
@@ -378,13 +434,14 @@ footer {
 .modal-content {
     background-color: white;
     padding: 2.5rem;
-    border-radius: 0.5rem;
+    border-radius: 0;
     width: 90%;
     max-width: 600px;
     box-shadow: var(--shadow-lg);
     position: relative;
     transform: translateY(20px);
     transition: transform 0.3s ease;
+    border: 1px solid var(--border-light);
 }
 
 .modal.active .modal-content {
@@ -448,6 +505,14 @@ footer {
     .footer-links {
         gap: 2rem;
     }
+    
+    .hero h1 {
+        font-size: 3rem;
+    }
+    
+    .subtitle {
+        font-size: 1.2rem;
+    }
 }
 
 @media (max-width: 768px) {
@@ -474,7 +539,11 @@ footer {
     }
     
     .hero h1 {
-        font-size: 2.25rem;
+        font-size: 2.5rem;
+    }
+    
+    .subtitle {
+        font-size: 1.1rem;
     }
     
     .initiatives-grid {
@@ -495,8 +564,7 @@ footer {
         margin-top: 1rem;
     }
     
-    .cta-buttons {
-        flex-direction: column;
-        gap: 1rem;
+    .code-snippet {
+        font-size: 0.8rem;
     }
 } 
